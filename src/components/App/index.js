@@ -1,5 +1,26 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import GlobalStyles from "./GlobalStyles";
+import { Reset } from "styled-reset";
+import Main from "../../pages/Main";
+import CreatePlayer from "../../pages/CreatePlayer";
+import RoomList from "../../pages/RoomList";
+import Standby from "../../pages/Standby";
+
 function App() {
-  return <div>App 입니다.</div>;
+  return (
+    <>
+      <GlobalStyles />
+      <Reset />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/create-player" element={<CreatePlayer />} />
+          <Route path="/room/list" element={<RoomList />} />
+          <Route path="/room/standby" element={<Standby />} />
+        </Routes>
+      </Router>
+    </>
+  );
 }
 
 export default App;
