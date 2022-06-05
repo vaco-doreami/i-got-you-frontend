@@ -12,8 +12,8 @@ export default function CreatePlayer() {
         <div>
           <p>직업</p>
           <select name="" id="">
-            <option value="">경찰</option>
-            <option value="">도둑</option>
+            <option value="police">경찰</option>
+            <option value="robber">도둑</option>
           </select>
         </div>
         <div>
