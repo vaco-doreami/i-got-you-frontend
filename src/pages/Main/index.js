@@ -5,7 +5,7 @@ export default function Main() {
   return (
     <MainWrap>
       <div>
-        <img src="/images/background/main_title.png" alt="메인 이미지" />
+        <img src="/images/background/main-title.png" alt="메인 이미지" />
         <Link to="/create-player">플레이어 생성하기</Link>
       </div>
     </MainWrap>

@@ -20,7 +20,7 @@ const GlobalStyles = createGlobalStyle`
     align-items: center;
     width: 100vw;
     height: 100vh;
-    background: url("/images/background/main_background.png") no-repeat center center / cover;
+    background: url("/images/background/main-background.png") no-repeat center center / cover;
   }
 `;
 
