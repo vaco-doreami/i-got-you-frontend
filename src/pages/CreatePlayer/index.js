@@ -2,10 +2,13 @@ import styled from "styled-components";
 import { imagePath } from "../../constants/canvas";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-
+import { useNavigate } from "react-router-dom";
+import { socket } from "../../utils/socket";
 import { info } from "../../states/player";
 
 export default function CreatePlayer() {
+  const navigate = useNavigate();
+
   const [characterImages, setCharacterImages] = useState(imagePath.filter(target => target.role === "police"));
   const [index, setIndex] = useState(0);
   const [player, setPlayer] = useRecoilState(info);
@@ -81,7 +84,7 @@ export default function CreatePlayer() {
           </div>
         </div>
         <p className="btn-wrap">
-          <button>방 만들기</button>
+          <button onClick={() => navigate(`../room/${socket.id}`)}>방 만들기</button>
           <button>방 리스트</button>
         </p>
       </CreatePlayerWrap>

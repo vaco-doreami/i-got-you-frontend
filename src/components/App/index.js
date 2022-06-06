@@ -16,7 +16,7 @@ function App() {
           <Route path="/" element={<Main />} />
           <Route path="/create-player" element={<CreatePlayer />} />
           <Route path="/room/list" element={<RoomList />} />
-          <Route path="/room/standby" element={<Standby />} />
+          <Route path="/room/:roomId" element={<Standby />} />
           <Route path="*" element={<Main />} />
         </Routes>
       </Router>
