@@ -6,19 +6,19 @@ import { useRecoilState } from "recoil";
 import { info } from "../../states/player";
 
 export default function CreatePlayer() {
-  const [characterImg, setCharacterImg] = useState(imagePath.filter(target => target.role === "police"));
+  const [characterImages, setCharacterImages] = useState(imagePath.filter(target => target.role === "police"));
   const [index, setIndex] = useState(0);
   const [player, setPlayer] = useRecoilState(info);
 
   const roleChange = e => {
     if (e.target.value === "police") {
       setIndex(0);
-      setCharacterImg(imagePath.filter(target => target.role === "police"));
+      setCharacterImages(imagePath.filter(target => target.role === "police"));
     }
 
     if (e.target.value === "robber") {
       setIndex(0);
-      setCharacterImg(imagePath.filter(target => target.role === "robber"));
+      setCharacterImages(imagePath.filter(target => target.role === "robber"));
     }
 
     setPlayer({
@@ -27,7 +27,7 @@ export default function CreatePlayer() {
     });
   };
 
-  const playerNameChange = e => {
+  const nicknameChange = e => {
     setPlayer({
       ...player,
       nickname: e.target.value,
@@ -36,14 +36,14 @@ export default function CreatePlayer() {
 
   const prevClick = () => {
     if (index === 0) {
-      setIndex(characterImg.length - 1);
+      setIndex(characterImages.length - 1);
     } else {
       setIndex(index - 1);
     }
   };
 
   const nextClick = () => {
-    if (index === characterImg.length - 1) {
+    if (index === characterImages.length - 1) {
       setIndex(0);
     } else {
       setIndex(index + 1);
@@ -53,7 +53,7 @@ export default function CreatePlayer() {
   useEffect(() => {
     setPlayer({
       ...player,
-      characterType: characterImg[index].alias,
+      characterType: characterImages[index].alias,
     });
   }, [index]);
 
@@ -63,11 +63,11 @@ export default function CreatePlayer() {
         <h3 className="title">캐릭터 생성</h3>
         <div>
           <p>이름</p>
-          <input type="text" onChange={playerNameChange} />
+          <input type="text" onChange={nicknameChange} />
         </div>
         <div>
           <p>직업</p>
-          <select onChange={roleChange}>
+          <select name="" id="" onChange={roleChange}>
             <option value="police">경찰</option>
             <option value="robber">도둑</option>
           </select>
@@ -76,7 +76,7 @@ export default function CreatePlayer() {
           <p>캐릭터선택</p>
           <div className="select-character-area">
             <button className="prev" onClick={prevClick} />
-            <img src={characterImg[index].path} alt={characterImg[index].alias} />
+            <img src={characterImages[index].path} alt={characterImages[index].alias} />
             <button className="next" onClick={nextClick} />
           </div>
         </div>
