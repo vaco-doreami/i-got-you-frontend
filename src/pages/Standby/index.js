@@ -12,8 +12,8 @@ export default function Standby() {
   useEffect(() => {
     socketApi.sendHostInfo(hostPlayer);
 
-    socket.on("receive-player", police => {
-      setRoleCount(police);
+    socket.on("receive-player", player => {
+      setRoleCount(player);
     });
   }, []);
 
