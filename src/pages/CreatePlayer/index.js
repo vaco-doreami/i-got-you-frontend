@@ -1,26 +1,83 @@
 import styled from "styled-components";
+import { imagePath } from "../../constants/canvas";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+
+import { info } from "../../states/player";
 
 export default function CreatePlayer() {
+  const [characterImg, setCharacterImg] = useState(imagePath.filter(target => target.role === "police"));
+  const [index, setIndex] = useState(0);
+  const [player, setPlayer] = useRecoilState(info);
+
+  const roleChange = e => {
+    if (e.target.value === "police") {
+      setIndex(0);
+      setCharacterImg(imagePath.filter(target => target.role === "police"));
+    }
+
+    if (e.target.value === "robber") {
+      setIndex(0);
+      setCharacterImg(imagePath.filter(target => target.role === "robber"));
+    }
+
+    setPlayer({
+      ...player,
+      role: e.target.value,
+    });
+  };
+
+  const playerNameChange = e => {
+    setPlayer({
+      ...player,
+      nickname: e.target.value,
+    });
+  };
+
+  const prevClick = () => {
+    if (index === 0) {
+      setIndex(characterImg.length - 1);
+    } else {
+      setIndex(index - 1);
+    }
+  };
+
+  const nextClick = () => {
+    if (index === characterImg.length - 1) {
+      setIndex(0);
+    } else {
+      setIndex(index + 1);
+    }
+  };
+
+  useEffect(() => {
+    setPlayer({
+      ...player,
+      characterType: characterImg[index].alias,
+    });
+  }, [index]);
+
   return (
     <div className="main-background">
       <CreatePlayerWrap>
         <h3 className="title">캐릭터 생성</h3>
         <div>
           <p>이름</p>
-          <input type="text" />
+          <input type="text" onChange={playerNameChange} />
         </div>
         <div>
           <p>직업</p>
-          <select name="" id="">
-            <option value="">경찰</option>
-            <option value="">도둑</option>
+          <select onChange={roleChange}>
+            <option value="police">경찰</option>
+            <option value="robber">도둑</option>
           </select>
         </div>
         <div>
           <p>캐릭터선택</p>
           <div className="select-character-area">
-            <button className="prev"></button>
-            <button className="next"></button>
+            <button className="prev" onClick={prevClick} />
+            <img src={characterImg[index].path} alt={characterImg[index].alias} />
+            <button className="next" onClick={nextClick} />
           </div>
         </div>
         <p className="btn-wrap">
@@ -33,8 +90,8 @@ export default function CreatePlayer() {
 }
 
 const CreatePlayerWrap = styled.div`
-  width: 550px;
-  padding: 20px;
+  width: 500px;
+  padding: 30px;
   margin: 0 auto;
   border-radius: 20px;
   background: #fff;
@@ -62,11 +119,17 @@ const CreatePlayerWrap = styled.div`
     .select-character-area {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       box-sizing: border-box;
       width: 90%;
+      height: 140px;
       margin: 0 auto;
       border: 2px solid #dfd57a;
       background: #fff;
+
+      img {
+        width: 60px;
+      }
 
       button {
         width: 10px;
@@ -85,6 +148,7 @@ const CreatePlayerWrap = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 30px;
 
     button {
       width: 49%;
