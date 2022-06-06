@@ -67,7 +67,7 @@ export default function CreatePlayer() {
         </div>
         <div>
           <p>직업</p>
-          <select name="" id="" onChange={roleChange}>
+          <select onChange={roleChange}>
             <option value="police">경찰</option>
             <option value="robber">도둑</option>
           </select>
