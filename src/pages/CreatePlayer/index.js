@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { imagePath } from "../../constants/canvas";
+import { imagePath } from "../../constants/assets";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";

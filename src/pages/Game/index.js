@@ -1,8 +1,8 @@
 import Phaser from "phaser";
-import { backgroundPath } from "../../constants/canvas";
+import { background } from "../../constants/assets";
 
 export default function Game() {
-  var config = {
+  const config = {
     type: Phaser.AUTO,
     width: 1920,
     height: 1080,
@@ -17,10 +17,10 @@ export default function Game() {
     },
   };
 
-  var game = new Phaser.Game(config);
+  const game = new Phaser.Game(config);
 
   function preload() {
-    this.load.image("background", backgroundPath[0].path);
+    this.load.image("background", background.game);
   }
 
   function create() {
