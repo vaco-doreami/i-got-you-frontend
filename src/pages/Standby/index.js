@@ -26,7 +26,7 @@ export default function Standby() {
           <p>도둑 {roleCount.robber}</p>
         </div>
         <div className="game-start-btn-wrap">
-          <Link to="">Run!</Link>
+          <Link to={`/game/${socket.id}`}>Run!</Link>
         </div>
       </StandbyWrap>
     </div>

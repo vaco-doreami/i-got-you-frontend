@@ -8,3 +8,18 @@ export const imagePath = [
   { role: "robber", alias: "robber5", path: "../images/character/long-hair-robber.png" },
   { role: "robber", alias: "robber6", path: "../images/character/red-hair-robber.png" },
 ];
+
+export const characterSpritePath = [
+  { path: "../images/characterSprite/man-police.png" },
+  { path: "../images/characterSprite/woman-police.png" },
+  { path: "../images/characterSprite/bald-robber.png" },
+  { path: "../images/characterSprite/beanie-hat-robber.png" },
+  { path: "../images/characterSprite/bomb-head-robber.png" },
+  { path: "../images/characterSprite/cloth-on-head-robber.png" },
+  { path: "../images/characterSprite/long-hair-robber.png" },
+  { path: "../images/characterSprite/red-hair-robber.png" },
+];
+
+export const backgroundPath = [{ path: "../images/background/game-background.png" }];
+
+export const obstaclePath = [{ path: "../images/car/blue-car.png" }, { path: "../images/car/green-car.png" }, { path: "../images/car/red-car.png" }, { path: "../images/car/yellow-car.png" }];
