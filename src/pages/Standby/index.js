@@ -1,19 +1,17 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { info } from "../../states/player";
-import { socket, socketApi } from "../../utils/socket";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { socket } from "../../utils/socket";
 import styled from "styled-components";
 
 export default function Standby() {
   const [roleCount, setRoleCount] = useState({});
-  const hostPlayer = useRecoilValue(info);
+  const id = useParams("roomId");
 
   useEffect(() => {
-    socketApi.sendHostInfo(hostPlayer);
+    socket.emit("standby-room", id.roomId);
 
-    socket.on("receive-player", player => {
-      setRoleCount(player);
+    socket.on("receive-player", roomRoleCount => {
+      setRoleCount(roomRoleCount);
     });
   }, []);
 

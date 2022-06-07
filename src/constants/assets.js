@@ -1,4 +1,4 @@
-export const imagePath = [
+export const characterImage = [
   { role: "police", alias: "police1", path: "/images/character/man-police.png" },
   { role: "police", alias: "police2", path: "/images/character/woman-police.png" },
   { role: "robber", alias: "robber1", path: "/images/character/bald-robber.png" },

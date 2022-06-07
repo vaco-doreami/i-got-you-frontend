@@ -1,26 +1,27 @@
-import styled from "styled-components";
-import { imagePath } from "../../constants/assets";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
-import { socket } from "../../utils/socket";
-import { info } from "../../states/player";
+import styled from "styled-components";
+
+import { socket, socketApi } from "../../utils/socket";
+import { playerInfo } from "../../states/player";
+import { characterImage } from "../../constants/assets";
 
 export default function CreatePlayer() {
-  const [characterImages, setCharacterImages] = useState(imagePath.filter(target => target.role === "police"));
+  const [characterImages, setCharacterImages] = useState(characterImage.filter(target => target.role === "police"));
   const [index, setIndex] = useState(0);
-  const [player, setPlayer] = useRecoilState(info);
+  const [player, setPlayer] = useRecoilState(playerInfo);
   const navigate = useNavigate();
 
   const roleChange = e => {
     if (e.target.value === "police") {
       setIndex(0);
-      setCharacterImages(imagePath.filter(target => target.role === "police"));
+      setCharacterImages(characterImage.filter(target => target.role === "police"));
     }
 
     if (e.target.value === "robber") {
       setIndex(0);
-      setCharacterImages(imagePath.filter(target => target.role === "robber"));
+      setCharacterImages(characterImage.filter(target => target.role === "robber"));
     }
 
     setPlayer({
@@ -59,6 +60,12 @@ export default function CreatePlayer() {
     });
   }, [index]);
 
+  const createRoom = () => {
+    socketApi.sendHostInfo(player);
+
+    navigate(`../room/${socket.id}`);
+  };
+
   return (
     <div className="main-background">
       <CreatePlayerWrap>
@@ -83,8 +90,8 @@ export default function CreatePlayer() {
           </div>
         </div>
         <p className="btn-wrap">
-          <button onClick={() => navigate(`/room/${socket.id}`)}>방 만들기</button>
-          <button>방 리스트</button>
+          <button onClick={createRoom}>방 만들기</button>
+          <button onClick={() => navigate(`/room/list`)}>방 리스트</button>
         </p>
       </CreatePlayerWrap>
     </div>
