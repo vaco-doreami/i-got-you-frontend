@@ -1,14 +1,29 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { info } from "../../states/player";
+import { socket, socketApi } from "../../utils/socket";
 import styled from "styled-components";
 
 export default function Standby() {
+  const [roleCount, setRoleCount] = useState({});
+  const hostPlayer = useRecoilValue(info);
+
+  useEffect(() => {
+    socketApi.sendHostInfo(hostPlayer);
+
+    socket.on("receive-player", player => {
+      setRoleCount(player);
+    });
+  }, []);
+
   return (
     <div className="main-background">
       <StandbyWrap>
         <p className="description">Waiting for other players . . .</p>
         <div className="count-wrap">
-          <p>경찰 2</p>
-          <p>도둑 4</p>
+          <p>경찰 {roleCount.police}</p>
+          <p>도둑 {roleCount.robber}</p>
         </div>
         <div className="game-start-btn-wrap">
           <Link to="">Run!</Link>
