@@ -5,10 +5,10 @@ import styled from "styled-components";
 
 export default function Standby() {
   const [roleCount, setRoleCount] = useState({});
-  const id = useParams("roomId");
+  const { roomId } = useParams();
 
   useEffect(() => {
-    socket.emit("standby-room", id.roomId);
+    socket.emit("standby-room", roomId);
 
     socket.on("receive-player", roomRoleCount => {
       setRoleCount(roomRoleCount);

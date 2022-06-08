@@ -15,8 +15,8 @@ export default function RoomList() {
   useEffect(() => {
     socketApi.enterRoomList();
 
-    socket.on("send-rooms", allJobCounts => {
-      setRoomMembers(allJobCounts);
+    socket.on("send-rooms", allRoomMembers => {
+      setRoomMembers(allRoomMembers);
     });
   }, []);
 
