@@ -23,9 +23,7 @@ export default function Standby() {
           <p>경찰 {roleCount.police}</p>
           <p>도둑 {roleCount.robber}</p>
         </div>
-        <div className="game-start-btn-wrap">
-          <Link to={`/game/${socket.id}`}>Run!</Link>
-        </div>
+        <div className="game-start-btn-wrap">{roleCount.police > 0 && roleCount.robber > 0 && <Link to={`/game/${socket.id}`}>Run!</Link>}</div>
       </StandbyWrap>
     </div>
   );

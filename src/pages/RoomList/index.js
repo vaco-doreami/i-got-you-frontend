@@ -8,7 +8,7 @@ import { playerInfo } from "../../states/player";
 import { socket, socketApi } from "../../utils/socket";
 
 export default function RoomList() {
-  const [roomsMembers, setRoomMemebers] = useState({});
+  const [roomsMembers, setRoomMembers] = useState({});
   const player = useRecoilState(playerInfo);
   const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ export default function RoomList() {
     socketApi.enterRoomList();
 
     socket.on("send-rooms", allJobCounts => {
-      setRoomMemebers(allJobCounts);
+      setRoomMembers(allJobCounts);
     });
   }, []);
 

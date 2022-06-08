@@ -72,7 +72,7 @@ export default function CreatePlayer() {
         <h3 className="title">캐릭터 생성</h3>
         <div>
           <p>이름</p>
-          <input type="text" onChange={nicknameChange} />
+          <input type="text" maxLength="5" onChange={nicknameChange} />
         </div>
         <div>
           <p>직업</p>
@@ -90,8 +90,20 @@ export default function CreatePlayer() {
           </div>
         </div>
         <p className="btn-wrap">
-          <button onClick={createRoom}>방 만들기</button>
-          <button onClick={() => navigate(`/room/list`)}>방 리스트</button>
+          <button
+            onClick={() => {
+              player.nickname.length === 0 ? alert("이름을 작성해주세요.") : createRoom();
+            }}
+          >
+            방 만들기
+          </button>
+          <button
+            onClick={() => {
+              player.nickname.length === 0 ? alert("이름을 작성해주세요.") : navigate(`/room/list`);
+            }}
+          >
+            방 리스트
+          </button>
         </p>
       </CreatePlayerWrap>
     </div>
