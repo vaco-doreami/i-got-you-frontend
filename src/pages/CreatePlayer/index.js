@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { socket, socketApi } from "../../utils/socket";
-import { playerInfo } from "../../states/player";
+import { playerState } from "../../states/player";
 import { characterImage } from "../../constants/assets";
 
 export default function CreatePlayer() {
   const [characterImages, setCharacterImages] = useState(characterImage.filter(target => target.role === "police"));
   const [index, setIndex] = useState(0);
-  const [player, setPlayer] = useRecoilState(playerInfo);
+  const [player, setPlayer] = useRecoilState(playerState);
   const navigate = useNavigate();
 
   const roleChange = e => {

@@ -1,7 +1,7 @@
 import { atom } from "recoil";
 
-export const playerInfo = atom({
-  key: "playerInfo",
+export const playerState = atom({
+  key: "playerState",
   default: {
     nickname: "",
     role: "police",

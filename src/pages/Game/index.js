@@ -1,31 +1,41 @@
 import Phaser from "phaser";
+import { useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { modalStatus } from "../../states/modal";
 import { background } from "../../constants/assets";
+import Modal from "../Modal";
 
 export default function Game() {
-  const config = {
-    type: Phaser.AUTO,
-    width: 1920,
-    height: 1080,
-    scale: {
-      mode: Phaser.Scale.FIT,
-      autoCenter: Phaser.Scale.CENTER_BOTH,
-    },
-    scene: {
-      preload: preload,
-      create: create,
-      update: update,
-    },
-  };
+  const isShowingModal = useRecoilValue(modalStatus);
 
-  const game = new Phaser.Game(config);
+  useEffect(() => {
+    const config = {
+      type: Phaser.AUTO,
+      width: 1920,
+      height: 1080,
+      scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+      },
+      scene: {
+        preload: preload,
+        create: create,
+        update: update,
+      },
+    };
 
-  function preload() {
-    this.load.image("background", background.game);
-  }
+    const game = new Phaser.Game(config);
 
-  function create() {
-    this.add.image(960, 540, "background");
-  }
+    function preload() {
+      this.load.image("background", background.game);
+    }
 
-  function update() {}
+    function create() {
+      this.add.image(960, 540, "background");
+    }
+
+    function update() {}
+  }, []);
+
+  return isShowingModal && <Modal type="countDown" />;
 }
