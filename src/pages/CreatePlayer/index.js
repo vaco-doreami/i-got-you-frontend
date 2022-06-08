@@ -1,24 +1,27 @@
-import styled from "styled-components";
-import { imagePath } from "../../constants/canvas";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-import { info } from "../../states/player";
+import { socket, socketApi } from "../../utils/socket";
+import { playerInfo } from "../../states/player";
+import { characterImage } from "../../constants/assets";
 
 export default function CreatePlayer() {
-  const [characterImages, setCharacterImages] = useState(imagePath.filter(target => target.role === "police"));
+  const [characterImages, setCharacterImages] = useState(characterImage.filter(target => target.role === "police"));
   const [index, setIndex] = useState(0);
-  const [player, setPlayer] = useRecoilState(info);
+  const [player, setPlayer] = useRecoilState(playerInfo);
+  const navigate = useNavigate();
 
   const roleChange = e => {
     if (e.target.value === "police") {
       setIndex(0);
-      setCharacterImages(imagePath.filter(target => target.role === "police"));
+      setCharacterImages(characterImage.filter(target => target.role === "police"));
     }
 
     if (e.target.value === "robber") {
       setIndex(0);
-      setCharacterImages(imagePath.filter(target => target.role === "robber"));
+      setCharacterImages(characterImage.filter(target => target.role === "robber"));
     }
 
     setPlayer({
@@ -57,13 +60,19 @@ export default function CreatePlayer() {
     });
   }, [index]);
 
+  const createRoom = () => {
+    socketApi.sendHostInfo(player);
+
+    navigate(`../room/${socket.id}`);
+  };
+
   return (
     <div className="main-background">
       <CreatePlayerWrap>
         <h3 className="title">캐릭터 생성</h3>
         <div>
           <p>이름</p>
-          <input type="text" onChange={nicknameChange} />
+          <input type="text" maxLength="5" onChange={nicknameChange} />
         </div>
         <div>
           <p>직업</p>
@@ -81,8 +90,20 @@ export default function CreatePlayer() {
           </div>
         </div>
         <p className="btn-wrap">
-          <button>방 만들기</button>
-          <button>방 리스트</button>
+          <button
+            onClick={() => {
+              player.nickname.length === 0 ? alert("이름을 작성해주세요.") : createRoom();
+            }}
+          >
+            방 만들기
+          </button>
+          <button
+            onClick={() => {
+              player.nickname.length === 0 ? alert("이름을 작성해주세요.") : navigate(`/room/list`);
+            }}
+          >
+            방 리스트
+          </button>
         </p>
       </CreatePlayerWrap>
     </div>

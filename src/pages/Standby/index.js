@@ -1,18 +1,29 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { socket } from "../../utils/socket";
 import styled from "styled-components";
 
 export default function Standby() {
+  const [roleCount, setRoleCount] = useState({});
+  const { roomId } = useParams();
+
+  useEffect(() => {
+    socket.emit("standby-room", roomId);
+
+    socket.on("receive-player", roomRoleCount => {
+      setRoleCount(roomRoleCount);
+    });
+  }, []);
+
   return (
     <div className="main-background">
       <StandbyWrap>
         <p className="description">Waiting for other players . . .</p>
         <div className="count-wrap">
-          <p>경찰 2</p>
-          <p>도둑 4</p>
+          <p>경찰 {roleCount.police}</p>
+          <p>도둑 {roleCount.robber}</p>
         </div>
-        <div className="game-start-btn-wrap">
-          <Link to="">Run!</Link>
-        </div>
+        <div className="game-start-btn-wrap">{roleCount.police > 0 && roleCount.robber > 0 && <Link to={`/game/${socket.id}`}>Run!</Link>}</div>
       </StandbyWrap>
     </div>
   );
