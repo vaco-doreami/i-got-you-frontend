@@ -6,5 +6,6 @@ export const playerInfo = atom({
     nickname: "",
     role: "police",
     characterType: "police1",
+    isHost: false,
   },
 });
