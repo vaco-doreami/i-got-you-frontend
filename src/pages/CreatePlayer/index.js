@@ -63,7 +63,12 @@ export default function CreatePlayer() {
   const createRoom = () => {
     socketApi.sendHostInfo(player);
 
-    navigate(`../room/${socket.id}`);
+    setPlayer({
+      ...player,
+      isHost: true,
+    });
+
+    navigate(`/room/${socket.id}`);
   };
 
   return (
@@ -99,7 +104,7 @@ export default function CreatePlayer() {
           </button>
           <button
             onClick={() => {
-              player.nickname.length === 0 ? alert("이름을 작성해주세요.") : navigate(`/room/list`);
+              player.nickname.length === 0 ? alert("이름을 작성해주세요.") : navigate("/room/list");
             }}
           >
             방 리스트
