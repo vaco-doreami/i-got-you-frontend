@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { socket } from "../../utils/socket";
+import { useRecoilValue } from "recoil";
+import { playerInfo } from "../../states/player";
 import styled from "styled-components";
 
 export default function Standby() {
   const [roleCount, setRoleCount] = useState({});
+  const { isHost } = useRecoilValue(playerInfo);
   const { roomId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     socket.emit("standby-room", roomId);
@@ -13,7 +17,13 @@ export default function Standby() {
     socket.on("receive-player", roomRoleCount => {
       setRoleCount(roomRoleCount);
     });
+
+    socket.on("change-all-player-scene", () => navigate(`/game/${roomId}`));
   }, []);
+
+  const pressRunButton = () => {
+    socket.emit("press-run-button", roomId);
+  };
 
   return (
     <div className="main-background">
@@ -23,7 +33,7 @@ export default function Standby() {
           <p>경찰 {roleCount.police}</p>
           <p>도둑 {roleCount.robber}</p>
         </div>
-        <div className="game-start-btn-wrap">{roleCount.police > 0 && roleCount.robber > 0 && <Link to={`/game/${socket.id}`}>Run!</Link>}</div>
+        <div className="game-start-btn-wrap">{roleCount.police > 0 && roleCount.robber > 0 && isHost && <button onClick={pressRunButton}>Run!</button>}</div>
       </StandbyWrap>
     </div>
   );
@@ -52,7 +62,7 @@ const StandbyWrap = styled.div`
   .game-start-btn-wrap {
     text-align: center;
 
-    a {
+    button {
       display: inline-block;
       font-size: 50px;
       padding: 30px 50px;
@@ -61,7 +71,7 @@ const StandbyWrap = styled.div`
       background: #fff;
     }
 
-    a:hover {
+    button:hover {
       color: #fff;
       background: #1a73e8;
     }
