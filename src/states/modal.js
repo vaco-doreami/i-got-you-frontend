@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 
-export const modalStatus = atom({
-  key: "modalIsOpen",
+export const modalState = atom({
+  key: "modalState",
   default: true,
 });
