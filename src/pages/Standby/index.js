@@ -18,10 +18,10 @@ export default function Standby() {
       setRoleCount(roomRoleCount);
     });
 
-    socket.on("game-start", () => navigate(`/game/${roomId}`));
+    socket.on("change-all-player-scene", () => navigate(`/game/${roomId}`));
   }, []);
 
-  const startGame = () => {
+  const pressRunButton = () => {
     socket.emit("press-run-button", roomId);
   };
 
@@ -33,7 +33,7 @@ export default function Standby() {
           <p>경찰 {roleCount.police}</p>
           <p>도둑 {roleCount.robber}</p>
         </div>
-        <div className="game-start-btn-wrap">{roleCount.police > 0 && roleCount.robber > 0 && isHost && <button onClick={startGame}>Run!</button>}</div>
+        <div className="game-start-btn-wrap">{roleCount.police > 0 && roleCount.robber > 0 && isHost && <button onClick={pressRunButton}>Run!</button>}</div>
       </StandbyWrap>
     </div>
   );
