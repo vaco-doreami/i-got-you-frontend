@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { socket } from "../../utils/socket";
 import { useRecoilValue } from "recoil";
-import { playerInfo } from "../../states/player";
+import { playerState } from "../../states/player";
 import styled from "styled-components";
 
 export default function Standby() {
   const [roleCount, setRoleCount] = useState({});
-  const { isHost } = useRecoilValue(playerInfo);
+  const { isHost } = useRecoilValue(playerState);
   const { roomId } = useParams();
   const navigate = useNavigate();
 

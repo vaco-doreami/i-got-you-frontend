@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
-import { playerInfo } from "../../states/player";
+import { playerState } from "../../states/player";
 
 import { socket, socketApi } from "../../utils/socket";
 
 export default function RoomList() {
   const [roomsMembers, setRoomMembers] = useState({});
-  const player = useRecoilState(playerInfo);
+  const player = useRecoilState(playerState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,14 +44,17 @@ export default function RoomList() {
     </div>
   );
 }
+
 const RoomListWrap = styled.div`
   width: 900px;
+
   h3 {
     text-align: center;
     margin-bottom: 30px;
     font-size: 30px;
     font-weight: bold;
   }
+
   span {
     display: inline-block;
     width: 100%;
@@ -65,11 +68,13 @@ const RoomListWrap = styled.div`
     transition: 0.3s;
     background: rgba(255, 255, 255, 0.7);
   }
+
   span:hover {
     cursor: pointer;
     color: #fff;
     background: #1a73e8;
   }
+
   li:last-child {
     a {
       margin-bottom: 0;
