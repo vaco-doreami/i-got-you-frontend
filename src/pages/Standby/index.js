@@ -1,19 +1,17 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { info } from "../../states/player";
-import { socket, socketApi } from "../../utils/socket";
+import { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import { socket } from "../../utils/socket";
 import styled from "styled-components";
 
 export default function Standby() {
   const [roleCount, setRoleCount] = useState({});
-  const hostPlayer = useRecoilValue(info);
+  const { roomId } = useParams();
 
   useEffect(() => {
-    socketApi.sendHostInfo(hostPlayer);
+    socket.emit("standby-room", roomId);
 
-    socket.on("receive-player", player => {
-      setRoleCount(player);
+    socket.on("receive-player", roomRoleCount => {
+      setRoleCount(roomRoleCount);
     });
   }, []);
 
@@ -25,9 +23,7 @@ export default function Standby() {
           <p>경찰 {roleCount.police}</p>
           <p>도둑 {roleCount.robber}</p>
         </div>
-        <div className="game-start-btn-wrap">
-          <Link to={`/game/${socket.id}`}>Run!</Link>
-        </div>
+        <div className="game-start-btn-wrap">{roleCount.police > 0 && roleCount.robber > 0 && <Link to={`/game/${socket.id}`}>Run!</Link>}</div>
       </StandbyWrap>
     </div>
   );

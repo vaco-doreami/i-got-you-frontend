@@ -1,44 +1,58 @@
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
+import { playerInfo } from "../../states/player";
+
+import { socket, socketApi } from "../../utils/socket";
+
 export default function RoomList() {
+  const [roomsMembers, setRoomMembers] = useState({});
+  const player = useRecoilState(playerInfo);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    socketApi.enterRoomList();
+
+    socket.on("send-rooms", allRoomMembers => {
+      setRoomMembers(allRoomMembers);
+    });
+  }, []);
+
+  const joinRoom = (roomId, player) => {
+    socket.emit("join-room", roomId, player);
+  };
+
   return (
     <div className="main-background">
       <RoomListWrap>
         <h3>방 리스트</h3>
         <ul>
-          <li>
-            <Link to="">경찰 1 / 도둑 2</Link>
-          </li>
-          <li>
-            <Link to="">경찰 1 / 도둑 2</Link>
-          </li>
-          <li>
-            <Link to="">경찰 1 / 도둑 2</Link>
-          </li>
-          <li>
-            <Link to="">경찰 1 / 도둑 2</Link>
-          </li>
-          <li>
-            <Link to="">경찰 1 / 도둑 2</Link>
-          </li>
+          {Object.keys(roomsMembers).map(roomId => (
+            <li key={roomId}>
+              <span
+                onClick={() => {
+                  joinRoom(roomId, player[0]);
+                  navigate(`/room/${roomId}`);
+                }}
+              >{`경찰 ${roomsMembers[roomId].policeId.length} / 도둑 ${roomsMembers[roomId].robberId.length}`}</span>
+            </li>
+          ))}
         </ul>
       </RoomListWrap>
     </div>
   );
 }
-
 const RoomListWrap = styled.div`
   width: 900px;
-
   h3 {
     text-align: center;
     margin-bottom: 30px;
     font-size: 30px;
     font-weight: bold;
   }
-
-  a {
+  span {
     display: inline-block;
     width: 100%;
     padding: 20px;
@@ -51,13 +65,11 @@ const RoomListWrap = styled.div`
     transition: 0.3s;
     background: rgba(255, 255, 255, 0.7);
   }
-
-  a:hover {
+  span:hover {
     cursor: pointer;
     color: #fff;
     background: #1a73e8;
   }
-
   li:last-child {
     a {
       margin-bottom: 0;
