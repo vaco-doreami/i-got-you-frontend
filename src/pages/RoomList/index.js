@@ -20,10 +20,6 @@ export default function RoomList() {
     });
   }, []);
 
-  const joinRoom = (roomId, player) => {
-    socket.emit("join-room", roomId, player);
-  };
-
   return (
     <div className="main-background">
       <RoomListWrap>
@@ -33,7 +29,7 @@ export default function RoomList() {
             <li key={roomId}>
               <span
                 onClick={() => {
-                  joinRoom(roomId, player[0]);
+                  socketApi.joinRoom(roomId, player[0]);
                   navigate(`/room/${roomId}`);
                 }}
               >{`경찰 ${roomsMembers[roomId].policeId.length} / 도둑 ${roomsMembers[roomId].robberId.length}`}</span>
