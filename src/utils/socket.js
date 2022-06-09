@@ -9,7 +9,10 @@ export const socketApi = {
   enterRoomList: () => {
     socket.emit("enter-room-list");
   },
-  joinRoom: user => {
-    socket.emit("join-room", user);
+  joinRoom: (roomId, player) => {
+    socket.emit("join-room", roomId, player);
+  },
+  enterGame: roomId => {
+    socket.emit("game-enter", roomId);
   },
 };

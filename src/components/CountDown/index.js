@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { modalStatus } from "../../states/modal";
+import { modalState } from "../../states/modal";
 import styled from "styled-components";
 
 export default function CountDown() {
   const [countDownSeconds, setCountDownSeconds] = useState(3);
-  const [isShowingModal, setIsShowingModal] = useRecoilState(modalStatus);
+  const [isShowingModal, setIsShowingModal] = useRecoilState(modalState);
 
   let second = countDownSeconds;
 

@@ -1,40 +1,34 @@
 import Phaser from "phaser";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { modalStatus } from "../../states/modal";
-import { background } from "../../constants/assets";
+import { modalState } from "../../states/modal";
 import Modal from "../Modal";
 
+import { config } from "../../phaser/config";
+import { socket, socketApi } from "../../utils/socket";
+import { characterSpriteSheet } from "../../constants/assets";
+
+import { GameScene } from "../../phaser/config";
+
 export default function Game() {
-  const isShowingModal = useRecoilValue(modalStatus);
+  const isShowingModal = useRecoilValue(modalState);
+  const { roomId } = useParams();
 
   useEffect(() => {
-    const config = {
-      type: Phaser.AUTO,
-      width: 1920,
-      height: 1080,
-      scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-      },
-      scene: {
-        preload: preload,
-        create: create,
-        update: update,
-      },
-    };
+    new Phaser.Game(config);
 
-    const game = new Phaser.Game(config);
+    socketApi.enterGame(roomId);
 
-    function preload() {
-      this.load.image("background", background.game);
-    }
+    socket.on("send-room-players-info", playersInfo => {
+      const players = playersInfo.map(playerInfo => {
+        playerInfo.characterType = characterSpriteSheet[playerInfo.characterType];
 
-    function create() {
-      this.add.image(960, 540, "background");
-    }
+        return playerInfo;
+      });
 
-    function update() {}
+      GameScene.players = players;
+    });
   }, []);
 
   return isShowingModal && <Modal type="countDown" />;
