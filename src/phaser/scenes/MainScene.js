@@ -1,15 +1,17 @@
-import { background } from "../../constants/assets";
+import { background, characterImage } from "../../constants/assets";
 
 export default class MainScene extends Phaser.Scene {
-  constructor() {
+  constructor(players) {
     super({
       key: "GameBackground",
     });
+
+    this.players = players;
   }
 
-  preload(players) {
+  preload() {
     this.load.image("background", background.game);
-    this.load.image("character", players[0].characterType);
+    this.load.image("character", characterImage[0].path);
   }
 
   create() {

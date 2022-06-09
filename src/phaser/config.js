@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import MainScene from "./scenes/MainScene";
 export const GameScene = new MainScene();
+// sys: Systems {scene: MainScene, config: {…}, settings: {…}, sceneUpdate: ƒ}
 
 export const config = {
   type: Phaser.AUTO,

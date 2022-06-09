@@ -27,7 +27,7 @@ export default function Game() {
         return playerInfo;
       });
 
-      GameScene.preload(players);
+      GameScene.players = players;
     });
   }, []);
 
