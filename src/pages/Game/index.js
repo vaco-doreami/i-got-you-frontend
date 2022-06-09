@@ -22,12 +22,12 @@ export default function Game() {
 
     socket.on("send-room-players-info", playersInfo => {
       const players = playersInfo.map(playerInfo => {
-        playerInfo.characterType = characterSpriteSheet[playerInfo.characterType];
+        playerInfo.characterPath = characterSpriteSheet[playerInfo.characterType];
 
         return playerInfo;
       });
 
-      GameScene.players = players;
+      GameScene.set(players);
     });
   }, []);
 

@@ -9,8 +9,3 @@ export const playerState = atom({
     isHost: false,
   },
 });
-
-export const info = atom({
-  key: "info",
-  default: 0,
-});
