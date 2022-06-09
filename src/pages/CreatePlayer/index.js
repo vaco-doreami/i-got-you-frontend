@@ -58,7 +58,7 @@ export default function CreatePlayer() {
       ...player,
       characterType: characterImages[index].alias,
     });
-  }, [index]);
+  }, [index, characterImages]);
 
   const createRoom = () => {
     socketApi.sendHostInfo(player);
