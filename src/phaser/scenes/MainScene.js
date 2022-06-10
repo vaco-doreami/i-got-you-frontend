@@ -57,9 +57,9 @@ export default class MainScene extends Scene {
     const randomDefaultY = Phaser.Math.Between(500, 800);
 
     this.player = this.physics.add.sprite(randomDefaultX, randomDefaultY, key).setScale(2, 2).refreshBody();
-
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
+    this.physics.world.bounds.setTo(0, 500, config.width, config.height - 500);
 
     this.anims.create({
       key: "left",
