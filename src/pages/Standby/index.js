@@ -68,6 +68,7 @@ const StandbyWrap = styled.div`
       padding: 30px 50px;
       border-radius: 50px;
       transition: 0.3s;
+      border: none;
       background: #fff;
     }
 

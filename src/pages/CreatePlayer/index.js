@@ -61,14 +61,31 @@ export default function CreatePlayer() {
   }, [index, characterImages]);
 
   const createRoom = () => {
-    socketApi.sendHostInfo(player);
-
-    setPlayer({
+    socketApi.sendHostInfo({
       ...player,
       isHost: true,
     });
 
+    socket.on("send-socket-id", socketId => {
+      setPlayer({
+        ...player,
+        id: socketId,
+        isHost: true,
+      });
+    });
+
     navigate(`/room/${socket.id}`);
+  };
+
+  const enterRoomList = () => {
+    socket.on("send-socket-id", socketId => {
+      setPlayer({
+        ...player,
+        id: socketId,
+      });
+    });
+
+    navigate("/room/list");
   };
 
   return (
@@ -104,7 +121,7 @@ export default function CreatePlayer() {
           </button>
           <button
             onClick={() => {
-              player.nickname.length === 0 ? alert("이름을 작성해주세요.") : navigate("/room/list");
+              player.nickname.length === 0 ? alert("이름을 작성해주세요.") : enterRoomList();
             }}
           >
             방 리스트
