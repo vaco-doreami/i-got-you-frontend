@@ -24,4 +24,9 @@ export const background = {
   game: "/images/background/game-background.png",
 };
 
-export const obstacle = [{ path: "/images/car/blue-car.png" }, { path: "/images/car/green-car.png" }, { path: "/images/car/red-car.png" }, { path: "/images/car/yellow-car.png" }];
+export const obstacle = {
+  bluecar: "/images/car/blue-car.png",
+  greencar: "/images/car/green-car.png",
+  redcar: "/images/car/red-car.png",
+  yellowcar: "/images/car/yellow-car.png",
+};

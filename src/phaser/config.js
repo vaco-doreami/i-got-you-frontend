@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import MainScene from "./scenes/MainScene";
-
 export const GameScene = new MainScene();
 
 export const config = {
@@ -11,9 +10,9 @@ export const config = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
+  parent: "phaser-game",
   physics: {
     default: "arcade",
   },
-  parent: "phaser-game",
   scene: [GameScene],
 };
