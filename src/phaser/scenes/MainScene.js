@@ -9,14 +9,14 @@ export default class MainScene extends Scene {
     this.id = null;
     this.roomId = null;
     this.players = {};
-    this.playerList = null;
-    this.lastDirection = "down";
+    this.playerList = [];
+    this.currentDirection = "stop";
   }
 
-  set(id, roomId, playersInfo) {
+  set(id, roomId, playerList) {
     this.id = id;
     this.roomId = roomId;
-    this.playerList = playersInfo;
+    this.playerList = playerList;
   }
 
   preload() {
@@ -41,7 +41,7 @@ export default class MainScene extends Scene {
 
     socket.on("send-stop-player", player => {
       if (player.id !== this.id) {
-        this.players[player.id].anims.stop();
+        this.players[player.id].anims.play(player.id + player.currentDirection);
         this.players[player.id].x = player.coordinateX;
         this.players[player.id].y = player.coordinateY;
       }
@@ -133,7 +133,7 @@ export default class MainScene extends Scene {
     });
 
     this.anims.create({
-      key: key + "turn",
+      key: key + "stop",
       frames: [{ key: key, frame: 0 }],
       frameRate: 20,
     });
@@ -153,35 +153,35 @@ export default class MainScene extends Scene {
       this.players[this.id].setVelocityX(-160);
       this.players[this.id].anims.play(this.id + "left", true);
 
-      this.lastDirection = "left";
+      this.currentDirection = "left";
 
       this.handleMove();
     } else if (this.cursors.right.isDown) {
       this.players[this.id].setVelocityX(160);
       this.players[this.id].anims.play(this.id + "right", true);
 
-      this.lastDirection = "right";
+      this.currentDirection = "right";
 
       this.handleMove();
     } else if (this.cursors.up.isDown) {
       this.players[this.id].setVelocityY(-160);
       this.players[this.id].anims.play(this.id + "up", true);
 
-      this.lastDirection = "up";
+      this.currentDirection = "up";
 
       this.handleMove();
     } else if (this.cursors.down.isDown) {
       this.players[this.id].setVelocityY(160);
       this.players[this.id].anims.play(this.id + "down", true);
 
-      this.lastDirection = "down";
+      this.currentDirection = "down";
 
       this.handleMove();
     } else {
       this.players[this.id].setVelocityX(0);
       this.players[this.id].setVelocityY(0);
 
-      this.players[this.id].anims.play(this.id + this.lastDirection);
+      this.players[this.id].anims.play(this.id + this.currentDirection);
 
       this.handleStop();
     }
@@ -191,13 +191,13 @@ export default class MainScene extends Scene {
     const coordinateX = this.players[this.id].x;
     const coordinateY = this.players[this.id].y;
 
-    socketApi.pressArrowKeys(this.roomId, this.id, this.lastDirection, coordinateX, coordinateY);
+    socketApi.pressArrowKeys(this.roomId, this.id, this.currentDirection, coordinateX, coordinateY);
   }
 
   handleStop() {
     const coordinateX = this.players[this.id].x;
     const coordinateY = this.players[this.id].y;
 
-    socketApi.offArrowKeys(this.roomId, this.id, this.lastDirection, coordinateX, coordinateY);
+    socketApi.offArrowKeys(this.roomId, this.id, this.currentDirection, coordinateX, coordinateY);
   }
 }
