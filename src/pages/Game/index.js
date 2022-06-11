@@ -37,7 +37,7 @@ export default function Game() {
         return playerInfo;
       });
 
-      GameScene.set(players);
+      GameScene.set(player.id, roomId, players);
     });
   }, []);
 
