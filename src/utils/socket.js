@@ -15,4 +15,19 @@ export const socketApi = {
   enterGame: roomId => {
     socket.emit("game-enter", roomId);
   },
+  pressArrowKeys: (roomId, playerId, currentDirection, coordinateX, coordinateY) => {
+    socket.emit("player-move", { roomId, playerId, currentDirection, coordinateX, coordinateY });
+  },
+  offArrowKeys: (roomId, playerId, currentDirection, coordinateX, coordinateY) => {
+    socket.emit("player-stop", { roomId, playerId, currentDirection, coordinateX, coordinateY });
+  },
+  findCurrentJoiningRoom: roomId => {
+    socket.emit("find-current-joining-room", roomId);
+  },
+  sendingSignalToConnectWebRTC: (teamplayerId, socketId, signal) => {
+    socket.emit("sending-signal-to-connect-webRTC", { userToSignal: teamplayerId, callerID: socketId, signal });
+  },
+  returningSignalToConnectWebRTC: (signal, callerID) => {
+    socket.emit("returning-signal-to-connect-webRTC", { signal, callerID });
+  },
 };

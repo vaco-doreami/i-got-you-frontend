@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { socket } from "../../utils/socket";
-
 import Peer from "simple-peer";
-import { useParams } from "react-router-dom";
+
+import { socketApi } from "../../utils/socket";
 
 export default function Video() {
   const { roomId } = useParams();
@@ -15,28 +16,28 @@ export default function Video() {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
       userVideo.current.srcObject = stream;
 
-      socket.emit("find-current-joining-room", roomId);
+      socketApi.findCurrentJoiningRoom(roomId);
 
       socket.on("send-current-joining-room", payload => {
-        if (socket.id === payload.policeId[0]) {
-          const peer = new Peer({
-            initiator: true,
-            trickle: false,
-            stream,
-          });
+        const teamplayerId = payload.policeId.find(id => id !== socket.id);
 
-          peer.on("signal", signal => {
-            socket.emit("sending-signal-to-connect-webRTC", { userToSignal: payload.policeId[1], callerID: socket.id, signal });
-          });
+        const peer = new Peer({
+          initiator: true,
+          trickle: false,
+          stream,
+        });
 
-          peer.on("stream", stream => {
-            teamPlayerVideo.current.srcObject = stream;
-          });
+        peer.on("signal", signal => {
+          socketApi.sendingSignalToConnectWebRTC(teamplayerId, socket.id, signal);
+        });
 
-          socket.on("receiving-returned-signal-to-connect-webRTC", payload => {
-            peer.signal(payload.signal);
-          });
-        }
+        peer.on("stream", stream => {
+          teamPlayerVideo.current.srcObject = stream;
+        });
+
+        socket.on("receiving-returned-signal-to-connect-webRTC", payload => {
+          peer.signal(payload.signal);
+        });
       });
 
       socket.on("new-video-chat-participant", payload => {
@@ -47,10 +48,12 @@ export default function Video() {
         });
 
         peer.on("signal", signal => {
-          socket.emit("returning-signal-to-connect-webRTC", { signal, callerID: payload.callerID });
+          socketApi.returningSignalToConnectWebRTC(signal, payload.callerID);
         });
 
-        teamPlayerVideo.current.srcObject = stream;
+        peer.on("stram", stream => {
+          teamPlayerVideo.current.srcObject = stream;
+        });
 
         peer.signal(payload.signal);
       });
