@@ -3,9 +3,10 @@ import { atom } from "recoil";
 export const playerState = atom({
   key: "playerState",
   default: {
-    nickname: "",
+    id: "",
     role: "police",
-    characterType: "police1",
     isHost: false,
+    nickname: "",
+    characterType: "police1",
   },
 });
