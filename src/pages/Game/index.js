@@ -31,13 +31,13 @@ export default function Game() {
     socketApi.enterGame(roomId);
 
     socket.on("send-room-players-info", playersInfo => {
-      const players = playersInfo.map(playerInfo => {
+      const playerList = playersInfo.map(playerInfo => {
         playerInfo.characterPath = characterSpriteSheet[playerInfo.characterType];
 
         return playerInfo;
       });
 
-      GameScene.set(players);
+      GameScene.set(player.id, roomId, playerList);
     });
   }, []);
 
