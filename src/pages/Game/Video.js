@@ -9,15 +9,15 @@ export default function Video() {
   const { roomId } = useParams();
 
   const userVideo = useRef();
-  const teamplayerVideo = useRef();
+  const teamPlayerVideo = useRef();
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
       userVideo.current.srcObject = stream;
 
-      socket.emit("find-current-room", roomId);
+      socket.emit("find-current-joining-room", roomId);
 
-      socket.on("return-current-room", payload => {
+      socket.on("send-current-joining-room", payload => {
         const teamplayerId = payload.policeId.find(id => id !== socket.id);
 
         const peer = new Peer({
@@ -31,7 +31,7 @@ export default function Video() {
         });
 
         peer.on("stream", stream => {
-          teamplayerVideo.current.srcObject = stream;
+          teamPlayerVideo.current.srcObject = stream;
         });
 
         socket.on("receiving-returned-signal-to-connect-webRTC", payload => {
@@ -51,18 +51,12 @@ export default function Video() {
         });
 
         peer.on("stram", stream => {
-          teamplayerVideo.current.srcObject = stream;
+          teamPlayerVideo.current.srcObject = stream;
         });
 
         peer.signal(payload.signal);
       });
     });
-
-    // return () => {
-    //   socket.removeAllListeners("return-current-room");
-    //   socket.removeAllListeners("new-video-chat-participant");
-    //   socket.removeAllListeners("receiving-returned-signal-to-connect-webRTC");
-    // };
   }, []);
 
   return (
@@ -71,7 +65,7 @@ export default function Video() {
         <video playsInline autoPlay ref={userVideo} />
       </div>
       <div>
-        <video playsInline autoPlay ref={teamplayerVideo} />
+        <video playsInline autoPlay ref={teamPlayerVideo} />
       </div>
     </VideoWrap>
   );

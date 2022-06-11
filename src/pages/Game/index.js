@@ -20,9 +20,9 @@ export default function Game() {
   const [isShowVideoComponent, setIsShowVideoComponent] = useState(false);
 
   useEffect(() => {
-    socket.emit("find-current-room", roomId);
+    socket.emit("find-current-joining-room", roomId);
 
-    socket.on("return-current-room", currentRoom => {
+    socket.on("send-current-joining-room", currentRoom => {
       currentRoom.policeId.length > 1 && setIsShowVideoComponent(true);
     });
 
