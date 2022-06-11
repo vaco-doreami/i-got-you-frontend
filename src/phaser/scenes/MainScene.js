@@ -33,7 +33,9 @@ export default class MainScene extends Scene {
   create() {
     socket.on("send-move-player", player => {
       if (player.id !== this.id) {
-        this.players[player.id].play(player.id + player.anims, true);
+        const { id, currentDirection } = player;
+
+        this.players[player.id].anims.play(id + currentDirection, true);
         this.players[player.id].x = player.coordinateX;
         this.players[player.id].y = player.coordinateY;
       }
@@ -41,7 +43,9 @@ export default class MainScene extends Scene {
 
     socket.on("send-stop-player", player => {
       if (player.id !== this.id) {
-        this.players[player.id].anims.play(player.id + player.currentDirection);
+        const { id, currentDirection } = player;
+
+        this.players[player.id].anims.play(id + currentDirection);
         this.players[player.id].x = player.coordinateX;
         this.players[player.id].y = player.coordinateY;
       }
@@ -54,7 +58,9 @@ export default class MainScene extends Scene {
     this.createCursor();
 
     for (const player of this.playerList) {
-      this.createPlayers(player.id, player.coordinateX, player.coordinateY);
+      const { id, coordinateX, coordinateY } = player;
+
+      this.createPlayers(id, coordinateX, coordinateY);
     }
 
     this.cameras.main.setBounds(0, 0, 1920, 1080);
