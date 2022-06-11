@@ -18,25 +18,25 @@ export default function Video() {
       socket.emit("find-current-joining-room", roomId);
 
       socket.on("send-current-joining-room", payload => {
-        const teamplayerId = payload.policeId.find(id => id !== socket.id);
+        if (socket.id === payload.policeId[0]) {
+          const peer = new Peer({
+            initiator: true,
+            trickle: false,
+            stream,
+          });
 
-        const peer = new Peer({
-          initiator: true,
-          trickle: false,
-          stream,
-        });
+          peer.on("signal", signal => {
+            socket.emit("sending-signal-to-connect-webRTC", { userToSignal: payload.policeId[1], callerID: socket.id, signal });
+          });
 
-        peer.on("signal", signal => {
-          socket.emit("sending-signal-to-connect-webRTC", { userToSignal: teamplayerId, callerID: socket.id, signal });
-        });
+          peer.on("stream", stream => {
+            teamPlayerVideo.current.srcObject = stream;
+          });
 
-        peer.on("stream", stream => {
-          teamPlayerVideo.current.srcObject = stream;
-        });
-
-        socket.on("receiving-returned-signal-to-connect-webRTC", payload => {
-          peer.signal(payload.signal);
-        });
+          socket.on("receiving-returned-signal-to-connect-webRTC", payload => {
+            peer.signal(payload.signal);
+          });
+        }
       });
 
       socket.on("new-video-chat-participant", payload => {
@@ -50,9 +50,7 @@ export default function Video() {
           socket.emit("returning-signal-to-connect-webRTC", { signal, callerID: payload.callerID });
         });
 
-        peer.on("stram", stream => {
-          teamPlayerVideo.current.srcObject = stream;
-        });
+        teamPlayerVideo.current.srcObject = stream;
 
         peer.signal(payload.signal);
       });
