@@ -15,4 +15,10 @@ export const socketApi = {
   enterGame: roomId => {
     socket.emit("game-enter", roomId);
   },
+  pressArrowKeys: (roomId, playerId, currentDirection, coordinateX, coordinateY) => {
+    socket.emit("player-move", { roomId, playerId, currentDirection, coordinateX, coordinateY });
+  },
+  offArrowKeys: (roomId, playerId, currentDirection, coordinateX, coordinateY) => {
+    socket.emit("player-stop", { roomId, playerId, currentDirection, coordinateX, coordinateY });
+  },
 };
