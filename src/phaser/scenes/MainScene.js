@@ -34,21 +34,21 @@ export default class MainScene extends Scene {
   create() {
     socket.on("send-move-player", player => {
       if (player.id !== this.id) {
-        const { id, currentDirection } = player;
+        const { id, currentDirection, coordinateX, coordinateY } = player;
 
         this.players[player.id].anims.play(id + currentDirection, true);
-        this.players[player.id].x = player.coordinateX;
-        this.players[player.id].y = player.coordinateY;
+        this.players[player.id].x = coordinateX;
+        this.players[player.id].y = coordinateY;
       }
     });
 
     socket.on("send-stop-player", player => {
       if (player.id !== this.id) {
-        const { id, currentDirection } = player;
+        const { id, currentDirection, coordinateX, coordinateY } = player;
 
         this.players[id].anims.play(id + currentDirection);
-        this.players[id].x = player.coordinateX;
-        this.players[id].y = player.coordinateY;
+        this.players[id].x = coordinateX;
+        this.players[id].y = coordinateY;
       }
     });
 
@@ -179,45 +179,39 @@ export default class MainScene extends Scene {
     this.moveCar(this.greencar, 5);
     this.moveCar(this.yellowcar, 6);
 
-    this.managePlayerMovement();
+    this.managePlayerMovement(this.id);
   }
 
-  managePlayerMovement() {
-    if (this.cursors.left.isDown && this.players[this.id].alpha === 1) {
-      this.players[this.id].setVelocityX(-160);
-      this.players[this.id].anims.play(this.id + "left", true);
+  managePlayerMovement(key) {
+    if (this.cursors.left.isDown && this.players[key].alpha === 1) {
+      this.players[key].setVelocityX(-160);
+      this.players[key].anims.play(key + "left", true);
 
       this.currentDirection = "left";
-
-      this.handleMove();
-    } else if (this.cursors.right.isDown && this.players[this.id].alpha === 1) {
-      this.players[this.id].setVelocityX(160);
-      this.players[this.id].anims.play(this.id + "right", true);
+    } else if (this.cursors.right.isDown && this.players[key].alpha === 1) {
+      this.players[key].setVelocityX(160);
+      this.players[key].anims.play(key + "right", true);
 
       this.currentDirection = "right";
-
-      this.handleMove();
-    } else if (this.cursors.up.isDown && this.players[this.id].alpha === 1) {
-      this.players[this.id].setVelocityY(-160);
-      this.players[this.id].anims.play(this.id + "up", true);
+    } else if (this.cursors.up.isDown && this.players[key].alpha === 1) {
+      this.players[key].setVelocityY(-160);
+      this.players[key].anims.play(key + "up", true);
 
       this.currentDirection = "up";
-
-      this.handleMove();
-    } else if (this.cursors.down.isDown && this.players[this.id].alpha === 1) {
-      this.players[this.id].setVelocityY(160);
-      this.players[this.id].anims.play(this.id + "down", true);
+    } else if (this.cursors.down.isDown && this.players[key].alpha === 1) {
+      this.players[key].setVelocityY(160);
+      this.players[key].anims.play(key + "down", true);
 
       this.currentDirection = "down";
-
-      this.handleMove();
     } else {
-      this.players[this.id].setVelocity(0);
+      this.players[key].setVelocity(0);
 
-      this.players[this.id].anims.play(this.id + this.currentDirection);
+      this.players[key].anims.play(key + this.currentDirection);
 
-      this.handleStop();
+      return this.handleStop();
     }
+
+    this.handleMove();
   }
 
   handleMove() {
@@ -249,9 +243,7 @@ export default class MainScene extends Scene {
   arrest() {
     socketApi.arrestRobber(this.roomId, this.id);
 
-    this.cameras.main.setBounds(0, 0, 1920, 1080);
     this.cameras.main.startFollow(this.players[this.id], false, 0.09, 0.09);
-
     this.cameras.main.setZoom(1);
   }
 }
