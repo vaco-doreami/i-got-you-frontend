@@ -7,14 +7,16 @@ export default class MainScene extends Scene {
   constructor() {
     super({ key: "MainScene" });
     this.id = null;
+    this.role = null;
     this.roomId = null;
     this.players = {};
     this.playerList = [];
     this.currentDirection = "stop";
   }
 
-  set(id, roomId, playerList) {
+  set(id, role, roomId, playerList) {
     this.id = id;
+    this.role = role;
     this.roomId = roomId;
     this.playerList = playerList;
   }
@@ -22,10 +24,9 @@ export default class MainScene extends Scene {
   preload() {
     this.load.image("background", background.game);
 
-    this.load.image("redcar", obstacle.redcar);
-    this.load.image("bluecar", obstacle.bluecar);
-    this.load.image("greencar", obstacle.greencar);
-    this.load.image("yellowcar", obstacle.yellowcar);
+    for (const carName in obstacle) {
+      this.load.image(carName, obstacle[carName]);
+    }
 
     this.load.once("filecomplete", this.loadPlayersOnComplete, this);
   }
@@ -45,11 +46,23 @@ export default class MainScene extends Scene {
       if (player.id !== this.id) {
         const { id, currentDirection } = player;
 
-        this.players[player.id].anims.play(id + currentDirection);
-        this.players[player.id].x = player.coordinateX;
-        this.players[player.id].y = player.coordinateY;
+        this.players[id].anims.play(id + currentDirection);
+        this.players[id].x = player.coordinateX;
+        this.players[id].y = player.coordinateY;
       }
     });
+
+    socket.on("send-collided-player", playerId => {
+      this.players[playerId].alpha === 1 ? (this.players[playerId].alpha = 0.5) : (this.players[playerId].alpha = 1);
+    });
+
+    socket.on("send-arrested-player", playerId => {
+      this.players[playerId].setVisible(false);
+    });
+
+    this.carGroup = this.add.group();
+    this.policeGroup = this.add.group();
+    this.robberGroup = this.add.group();
 
     this.createBackground();
 
@@ -58,13 +71,20 @@ export default class MainScene extends Scene {
     this.createCursor();
 
     for (const player of this.playerList) {
-      const { id, coordinateX, coordinateY } = player;
+      const { id, role, coordinateX, coordinateY } = player;
 
-      this.createPlayers(id, coordinateX, coordinateY);
+      this.createPlayers(id, role, coordinateX, coordinateY);
+    }
+
+    if (this.role === "police") {
+      this.physics.add.overlap(this.players[this.id], this.carGroup, this.collideCar, null, this);
+    } else {
+      this.physics.add.overlap(this.players[this.id], this.policeGroup, this.arrest, null, this);
     }
 
     this.cameras.main.setBounds(0, 0, 1920, 1080);
     this.cameras.main.startFollow(this.players[this.id], true, 0.09, 0.09);
+
     this.cameras.main.setZoom(2);
   }
 
@@ -78,6 +98,11 @@ export default class MainScene extends Scene {
     this.bluecar = this.physics.add.sprite(500, 750, "bluecar").setScale(0.5, 0.5);
     this.greencar = this.physics.add.sprite(600, 750, "greencar").setScale(0.5, 0.5);
     this.yellowcar = this.physics.add.sprite(700, 810, "yellowcar").setScale(0.5, 0.5);
+
+    this.carGroup.add(this.redcar);
+    this.carGroup.add(this.bluecar);
+    this.carGroup.add(this.greencar);
+    this.carGroup.add(this.yellowcar);
   }
 
   createCursor() {
@@ -100,12 +125,18 @@ export default class MainScene extends Scene {
     });
   }
 
-  createPlayers(key, coordinateX, coordinateY) {
+  createPlayers(key, role, coordinateX, coordinateY) {
     this.players[key] = this.physics.add.sprite(coordinateX, coordinateY, key).setScale(2, 2).refreshBody();
 
     this.players[key].setBounce(0.2);
     this.players[key].setCollideWorldBounds(true);
     this.physics.world.bounds.setTo(0, 500, config.width, config.height - 500);
+
+    if (role === "police") {
+      this.policeGroup.add(this.players[key]);
+    } else {
+      this.robberGroup.add(this.players[key]);
+    }
 
     this.anims.create({
       key: key + "left",
@@ -152,36 +183,41 @@ export default class MainScene extends Scene {
   }
 
   managePlayerMovement() {
-    if (this.cursors.left.isDown) {
+    if (this.cursors.left.isDown && this.players[this.id].alpha === 1) {
       this.players[this.id].setVelocityX(-160);
       this.players[this.id].anims.play(this.id + "left", true);
 
       this.currentDirection = "left";
-    } else if (this.cursors.right.isDown) {
+
+      this.handleMove();
+    } else if (this.cursors.right.isDown && this.players[this.id].alpha === 1) {
       this.players[this.id].setVelocityX(160);
       this.players[this.id].anims.play(this.id + "right", true);
 
       this.currentDirection = "right";
-    } else if (this.cursors.up.isDown) {
+
+      this.handleMove();
+    } else if (this.cursors.up.isDown && this.players[this.id].alpha === 1) {
       this.players[this.id].setVelocityY(-160);
       this.players[this.id].anims.play(this.id + "up", true);
 
       this.currentDirection = "up";
-    } else if (this.cursors.down.isDown) {
+
+      this.handleMove();
+    } else if (this.cursors.down.isDown && this.players[this.id].alpha === 1) {
       this.players[this.id].setVelocityY(160);
       this.players[this.id].anims.play(this.id + "down", true);
 
       this.currentDirection = "down";
+
+      this.handleMove();
     } else {
-      this.players[this.id].setVelocityX(0);
-      this.players[this.id].setVelocityY(0);
+      this.players[this.id].setVelocity(0);
 
       this.players[this.id].anims.play(this.id + this.currentDirection);
 
-      return this.handleStop();
+      this.handleStop();
     }
-
-    this.handleMove();
   }
 
   handleMove() {
@@ -196,5 +232,26 @@ export default class MainScene extends Scene {
     const coordinateY = this.players[this.id].y;
 
     socketApi.offArrowKeys(this.roomId, this.id, this.currentDirection, coordinateX, coordinateY);
+  }
+
+  collideCar(player) {
+    if (player.alpha === 1) {
+      socketApi.policeOpacityChanged(this.roomId, this.id);
+
+      const timer = setTimeout(() => {
+        socketApi.policeOpacityChanged(this.roomId, this.id);
+
+        clearTimeout(timer);
+      }, 3000);
+    }
+  }
+
+  arrest() {
+    socketApi.arrestRobber(this.roomId, this.id);
+
+    this.cameras.main.setBounds(0, 0, 1920, 1080);
+    this.cameras.main.startFollow(this.players[this.id], false, 0.09, 0.09);
+
+    this.cameras.main.setZoom(1);
   }
 }
