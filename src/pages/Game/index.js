@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { modalState } from "../../states/modal";
 import Modal from "../Modal";
-import Video from "./Video";
+import Video from "../../components/Video";
 import { playerState } from "../../states/player";
 
 import { config } from "../../phaser/config";
@@ -20,7 +20,7 @@ export default function Game() {
   const [isShowVideoComponent, setIsShowVideoComponent] = useState(false);
 
   useEffect(() => {
-    socket.emit("find-current-joining-room", roomId);
+    socketApi.findCurrentJoiningRoom(roomId);
 
     socket.on("send-current-joining-room", currentRoom => {
       currentRoom.policeId.length > 1 && setIsShowVideoComponent(true);
