@@ -5,11 +5,11 @@ import { socket } from "../../utils/socket";
 import styled from "styled-components";
 
 export default function Time() {
-  const defaultTime = 180;
+  const gameRunningTime = 180;
 
   const setIsShowingTime = useSetRecoilState(timeState);
   const setIsResultModalOpen = useSetRecoilState(winnerState);
-  const [remainingTime, setRemainingTime] = useState(defaultTime);
+  const [remainingTime, setRemainingTime] = useState(gameRunningTime);
 
   let second = remainingTime;
 
@@ -53,9 +53,8 @@ export default function Time() {
 const TimeTicker = styled.div`
   display: flex;
   position: fixed;
-  top: 0;
+  top: 20px;
   left: 20px;
-  margin-top: 20px;
   width: 80px;
   height: 30px;
   font-weight: bold;
