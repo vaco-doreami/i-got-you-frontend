@@ -1,9 +1,10 @@
 import { useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { socket } from "../../utils/socket";
-
 import Peer from "simple-peer";
-import { useParams } from "react-router-dom";
+
+import { socketApi } from "../../utils/socket";
 
 export default function Video() {
   const { roomId } = useParams();
@@ -15,7 +16,7 @@ export default function Video() {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
       userVideo.current.srcObject = stream;
 
-      socket.emit("find-current-joining-room", roomId);
+      socketApi.findCurrentJoiningRoom(roomId);
 
       socket.on("send-current-joining-room", payload => {
         const teamplayerId = payload.policeId.find(id => id !== socket.id);
@@ -27,7 +28,7 @@ export default function Video() {
         });
 
         peer.on("signal", signal => {
-          socket.emit("sending-signal-to-connect-webRTC", { userToSignal: teamplayerId, callerID: socket.id, signal });
+          socketApi.sendingSignalToConnectWebRTC(teamplayerId, socket.id, signal);
         });
 
         peer.on("stream", stream => {
@@ -47,7 +48,7 @@ export default function Video() {
         });
 
         peer.on("signal", signal => {
-          socket.emit("returning-signal-to-connect-webRTC", { signal, callerID: payload.callerID });
+          socketApi.returningSignalToConnectWebRTC(signal, payload.callerID);
         });
 
         peer.on("stram", stream => {

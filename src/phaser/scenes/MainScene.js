@@ -1,4 +1,4 @@
-import Phaser, { Scene } from "phaser";
+import { Scene } from "phaser";
 import { background, obstacle } from "../../constants/assets";
 import { config } from "../config";
 import { socket, socketApi } from "../../utils/socket";
@@ -65,7 +65,6 @@ export default class MainScene extends Scene {
 
     this.cameras.main.setBounds(0, 0, 1920, 1080);
     this.cameras.main.startFollow(this.players[this.id], true, 0.09, 0.09);
-
     this.cameras.main.setZoom(2);
   }
 
@@ -75,12 +74,10 @@ export default class MainScene extends Scene {
   }
 
   createCars() {
-    const randomX = Phaser.Math.Between(0, config.width);
-
-    this.redcar = this.physics.add.sprite(randomX, 700, "redcar").setScale(0.5, 0.5);
-    this.bluecar = this.physics.add.sprite(randomX, 750, "bluecar").setScale(0.5, 0.5);
-    this.greencar = this.physics.add.sprite(randomX, 750, "greencar").setScale(0.5, 0.5);
-    this.yellowcar = this.physics.add.sprite(randomX, 810, "yellowcar").setScale(0.5, 0.5);
+    this.redcar = this.physics.add.sprite(400, 700, "redcar").setScale(0.5, 0.5);
+    this.bluecar = this.physics.add.sprite(500, 750, "bluecar").setScale(0.5, 0.5);
+    this.greencar = this.physics.add.sprite(600, 750, "greencar").setScale(0.5, 0.5);
+    this.yellowcar = this.physics.add.sprite(700, 810, "yellowcar").setScale(0.5, 0.5);
   }
 
   createCursor() {
@@ -160,37 +157,31 @@ export default class MainScene extends Scene {
       this.players[this.id].anims.play(this.id + "left", true);
 
       this.currentDirection = "left";
-
-      this.handleMove();
     } else if (this.cursors.right.isDown) {
       this.players[this.id].setVelocityX(160);
       this.players[this.id].anims.play(this.id + "right", true);
 
       this.currentDirection = "right";
-
-      this.handleMove();
     } else if (this.cursors.up.isDown) {
       this.players[this.id].setVelocityY(-160);
       this.players[this.id].anims.play(this.id + "up", true);
 
       this.currentDirection = "up";
-
-      this.handleMove();
     } else if (this.cursors.down.isDown) {
       this.players[this.id].setVelocityY(160);
       this.players[this.id].anims.play(this.id + "down", true);
 
       this.currentDirection = "down";
-
-      this.handleMove();
     } else {
       this.players[this.id].setVelocityX(0);
       this.players[this.id].setVelocityY(0);
 
       this.players[this.id].anims.play(this.id + this.currentDirection);
 
-      this.handleStop();
+      return this.handleStop();
     }
+
+    this.handleMove();
   }
 
   handleMove() {
