@@ -3,11 +3,15 @@ import ReactDOM from "react-dom";
 import styled from "styled-components";
 
 import CountDown from "../../components/CountDown";
+import GameResult from "../../components/GameResult";
 
 export default function Modal(props) {
   return ReactDOM.createPortal(
     <div>
-      <ModalBackground>{props.type === "countDown" && <CountDown />}</ModalBackground>
+      <ModalBackground>
+        {props.type === "preload" && <CountDown />}
+        {props.type === "showResult" && <GameResult />}
+      </ModalBackground>
     </div>,
     document.getElementById("portal")
   );
