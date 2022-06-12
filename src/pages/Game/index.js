@@ -42,7 +42,7 @@ export default function Game() {
         return playerInfo;
       });
 
-      GameScene.set(player.id, roomId, playerList);
+      GameScene.set(player.id, player.role, roomId, playerList);
     });
   }, []);
 

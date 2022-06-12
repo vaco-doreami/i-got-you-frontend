@@ -21,6 +21,12 @@ export const socketApi = {
   offArrowKeys: (roomId, playerId, currentDirection, coordinateX, coordinateY) => {
     socket.emit("player-stop", { roomId, playerId, currentDirection, coordinateX, coordinateY });
   },
+  policeOpacityChanged: (roomId, playerId) => {
+    socket.emit("police-opacity-change", { roomId, playerId });
+  },
+  arrestRobber: (roomId, playerId) => {
+    socket.emit("arrest-robber", { roomId, playerId });
+  },
   findCurrentJoiningRoom: roomId => {
     socket.emit("find-current-joining-room", roomId);
   },
