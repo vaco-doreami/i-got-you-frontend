@@ -5,30 +5,34 @@ import { useRecoilValue } from "recoil";
 import { modalState } from "../../states/modal";
 import Modal from "../Modal";
 import Video from "../../components/Video";
+import Time from "../../components/Time";
+import { preloadState, timeState, winnerState } from "../../states/modal";
 import { playerState } from "../../states/player";
 
-import { config } from "../../phaser/config";
 import { socket, socketApi } from "../../utils/socket";
 import { characterSpriteSheet } from "../../constants/assets";
-
 import { GameScene } from "../../phaser/config";
+import { config } from "../../phaser/config";
 
 export default function Game() {
-  const isShowingModal = useRecoilValue(modalState);
-  const { roomId } = useParams();
+  const isPreloadModalOpen = useRecoilValue(preloadState);
+  const isShowRemainingTime = useRecoilValue(timeState);
+  const isResultModalOpen = useRecoilValue(winnerState);
+
   const player = useRecoilValue(playerState);
   const [isShowVideoComponent, setIsShowVideoComponent] = useState(false);
+  const { roomId } = useParams();
 
   useEffect(() => {
+    new Phaser.Game(config);
+
+    socketApi.enterGame(roomId);
+
     socketApi.findCurrentJoiningRoom(roomId);
 
     socket.on("send-current-joining-room", currentRoom => {
       currentRoom.policeId.length > 1 && setIsShowVideoComponent(true);
     });
-
-    new Phaser.Game(config);
-
-    socketApi.enterGame(roomId);
 
     socket.on("send-room-players-info", playersInfo => {
       const playerList = playersInfo.map(playerInfo => {
@@ -37,14 +41,16 @@ export default function Game() {
         return playerInfo;
       });
 
-      GameScene.set(player.id, roomId, playerList);
+      GameScene.set(player.id, player.role, roomId, playerList);
     });
   }, []);
 
   return (
     <>
       {player.role === "police" && isShowVideoComponent && <Video />}
-      {isShowingModal && <Modal type="countDown" />}
+      {isPreloadModalOpen && <Modal type="preload" />}
+      {isShowRemainingTime && <Time />}
+      {isResultModalOpen && <Modal type="showResult" />}
     </>
   );
 }
