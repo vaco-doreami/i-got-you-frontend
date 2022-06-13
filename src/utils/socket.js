@@ -27,15 +27,6 @@ export const socketApi = {
   arrestRobber: (roomId, playerId) => {
     socket.emit("arrest-robber", { roomId, playerId });
   },
-  findCurrentJoiningRoom: roomId => {
-    socket.emit("find-current-joining-room", roomId);
-  },
-  sendingSignalToConnectWebRTC: (teamplayerId, socketId, signal) => {
-    socket.emit("sending-signal-to-connect-webRTC", { userToSignal: teamplayerId, callerID: socketId, signal });
-  },
-  returningSignalToConnectWebRTC: (signal, callerID) => {
-    socket.emit("returning-signal-to-connect-webRTC", { signal, callerID });
-  },
   leaveRoom: (roomId, role, id, isHost) => {
     socket.emit("leave-room", { roomId, role, id, isHost });
   },
@@ -53,8 +44,5 @@ export const socketApi = {
   },
   sendingSignalToConnectWebRTC: payload => {
     socket.emit("sending-signal-to-connect-webRTC", { userToSignal: payload.userToSignal, callerID: payload.callerID, signal: payload.signal });
-  },
-  findCurrentJoiningRoom: roomId => {
-    socket.emit("find-current-joining-room", roomId);
   },
 };
