@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 import { playerState } from "../../states/player";
@@ -9,7 +9,7 @@ import { socket, socketApi } from "../../utils/socket";
 
 export default function RoomList() {
   const [roomsMembers, setRoomMembers] = useState({});
-  const player = useRecoilState(playerState);
+  const player = useRecoilValue(playerState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,20 +32,20 @@ export default function RoomList() {
               <li key={roomId}>
                 <span
                   onClick={() => {
-                    if (player[0].role === "police") {
+                    if (player.role === "police") {
                       if (roomsMembers[roomId].policeId.length === 2) {
                         alert("경찰인원이 꽉찼습니다.");
                       } else {
-                        socketApi.joinRoom(roomId, player[0]);
+                        socketApi.joinRoom(roomId, player);
                         navigate(`/room/${roomId}`);
                       }
                     }
 
-                    if (player[0].role === "robber") {
+                    if (player.role === "robber") {
                       if (roomsMembers[roomId].robberId.length === 4) {
                         alert("도둑인원이 꽉찼습니다.");
                       } else {
-                        socketApi.joinRoom(roomId, player[0]);
+                        socketApi.joinRoom(roomId, player);
                         navigate(`/room/${roomId}`);
                       }
                     }

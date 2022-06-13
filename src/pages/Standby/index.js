@@ -28,7 +28,7 @@ export default function Standby() {
     socketApi.pressRunButton(roomId);
   };
 
-  const pressLeaveRoomBtn = (roomId, role, id, isHost) => {
+  const pressLeaveRoomButton = (roomId, role, id, isHost) => {
     socketApi.leaveRoom(roomId, role, id, isHost);
   };
 
@@ -39,7 +39,7 @@ export default function Standby() {
           src="/images/leave.png"
           alt="leave_btn_images"
           onClick={() => {
-            pressLeaveRoomBtn(roomId, role, id, isHost);
+            pressLeaveRoomButton(roomId, role, id, isHost);
           }}
         />
         <p className="description">Waiting for other players . . .</p>
