@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 import { playerState } from "../../states/player";
@@ -9,7 +9,7 @@ import { socket, socketApi } from "../../utils/socket";
 
 export default function RoomList() {
   const [roomsMembers, setRoomMembers] = useState({});
-  const player = useRecoilState(playerState);
+  const player = useRecoilValue(playerState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,16 +25,35 @@ export default function RoomList() {
       <RoomListWrap>
         <h3>방 리스트</h3>
         <ul>
-          {Object.keys(roomsMembers).map(roomId => (
-            <li key={roomId}>
-              <span
-                onClick={() => {
-                  socketApi.joinRoom(roomId, player[0]);
-                  navigate(`/room/${roomId}`);
-                }}
-              >{`경찰 ${roomsMembers[roomId].policeId.length} / 도둑 ${roomsMembers[roomId].robberId.length}`}</span>
-            </li>
-          ))}
+          {Object.keys(roomsMembers).map(roomId =>
+            (roomsMembers[roomId].policeId.length === 2 && roomsMembers[roomId].robberId.length === 4) || roomsMembers[roomId].isProgressGame ? (
+              ""
+            ) : (
+              <li key={roomId}>
+                <span
+                  onClick={() => {
+                    if (player.role === "police") {
+                      if (roomsMembers[roomId].policeId.length === 2) {
+                        alert("경찰인원이 꽉찼습니다.");
+                      } else {
+                        socketApi.joinRoom(roomId, player);
+                        navigate(`/room/${roomId}`);
+                      }
+                    }
+
+                    if (player.role === "robber") {
+                      if (roomsMembers[roomId].robberId.length === 4) {
+                        alert("도둑인원이 꽉찼습니다.");
+                      } else {
+                        socketApi.joinRoom(roomId, player);
+                        navigate(`/room/${roomId}`);
+                      }
+                    }
+                  }}
+                >{`경찰 ${roomsMembers[roomId].policeId.length} / 도둑 ${roomsMembers[roomId].robberId.length}`}</span>
+              </li>
+            )
+          )}
         </ul>
       </RoomListWrap>
     </div>
