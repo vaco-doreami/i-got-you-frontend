@@ -29,7 +29,8 @@ export default class MainScene extends Scene {
   }
 
   makeRobberInvisible(playerId) {
-    this.players[playerId].setVisible(false);
+    this.playerSprites[playerId].setVisible(false);
+    this.nicknameSprites[playerId].setVisible(false);
   }
 
   preload() {
@@ -71,11 +72,6 @@ export default class MainScene extends Scene {
 
     socket.on("send-collided-player", playerId => {
       this.playerSprites[playerId].alpha === 1 ? (this.playerSprites[playerId].alpha = 0.5) : (this.playerSprites[playerId].alpha = 1);
-    });
-
-    socket.on("send-arrested-player", playerId => {
-      this.playerSprites[playerId].setVisible(false);
-      this.nicknameSprites[playerId].setVisible(false);
     });
 
     this.carGroup = this.add.group();
@@ -205,21 +201,25 @@ export default class MainScene extends Scene {
     if (this.isStart) {
       if (this.cursors.left.isDown && this.playerSprites[key].alpha === 1) {
         this.playerSprites[key].setVelocityX(-160);
+        this.playerSprites[key].setVelocityY(0);
         this.playerSprites[key].anims.play(key + "left", true);
 
         this.currentDirection = "left";
       } else if (this.cursors.right.isDown && this.playerSprites[key].alpha === 1) {
         this.playerSprites[key].setVelocityX(160);
+        this.playerSprites[key].setVelocityY(0);
         this.playerSprites[key].anims.play(key + "right", true);
 
         this.currentDirection = "right";
       } else if (this.cursors.up.isDown && this.playerSprites[key].alpha === 1) {
         this.playerSprites[key].setVelocityY(-160);
+        this.playerSprites[key].setVelocityX(0);
         this.playerSprites[key].anims.play(key + "up", true);
 
         this.currentDirection = "up";
       } else if (this.cursors.down.isDown && this.playerSprites[key].alpha === 1) {
         this.playerSprites[key].setVelocityY(160);
+        this.playerSprites[key].setVelocityX(0);
         this.playerSprites[key].anims.play(key + "down", true);
 
         this.currentDirection = "down";
