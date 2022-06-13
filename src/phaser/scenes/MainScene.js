@@ -28,6 +28,10 @@ export default class MainScene extends Scene {
     this.isStart = isStart;
   }
 
+  makeRobberInvisible(playerId) {
+    this.players[playerId].setVisible(false);
+  }
+
   preload() {
     this.load.image("background", background.game);
 
