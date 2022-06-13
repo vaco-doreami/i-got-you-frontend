@@ -11,8 +11,8 @@ export default class MainScene extends Scene {
     this.role = null;
     this.roomId = null;
     this.playerList = [];
-    this.spritePlayers = {};
-    this.spriteNicknames = {};
+    this.playerSprites = {};
+    this.nicknameSprites = {};
     this.currentDirection = "stop";
     this.isStart = false;
   }
