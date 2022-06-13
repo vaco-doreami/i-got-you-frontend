@@ -1,8 +1,9 @@
 import Phaser from "phaser";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { modalState } from "../../states/modal";
+
 import Modal from "../Modal";
 import Video from "../../components/Video";
 import Time from "../../components/Time";
@@ -22,6 +23,7 @@ export default function Game() {
   const player = useRecoilValue(playerState);
   const [isShowVideoComponent, setIsShowVideoComponent] = useState(false);
   const { roomId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     new Phaser.Game(config);
@@ -41,9 +43,25 @@ export default function Game() {
         return playerInfo;
       });
 
-      GameScene.set(player.id, player.role, roomId, playerList);
+      GameScene.initialize(player.id, player.role, roomId, playerList);
     });
   }, []);
+
+  useEffect(() => {
+    if (!isPreloadModalOpen) {
+      GameScene.gameSet(true);
+    }
+  }, [isPreloadModalOpen]);
+
+  useEffect(() => {
+    if (isResultModalOpen) {
+      const moveToMainScreen = setTimeout(() => {
+        navigate("/");
+      }, 5000);
+
+      return () => clearTimeout(moveToMainScreen);
+    }
+  }, [isResultModalOpen]);
 
   return (
     <>

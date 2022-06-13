@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import MainScene from "./scenes/MainScene";
+
 export const GameScene = new MainScene();
 
 export const config = {
