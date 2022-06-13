@@ -57,8 +57,9 @@ export default function Game() {
     if (isResultModalOpen) {
       const moveToMainScreen = setTimeout(() => {
         navigate("/");
-        clearTimeout(moveToMainScreen);
       }, 5000);
+
+      return () => clearTimeout(moveToMainScreen);
     }
   }, [isResultModalOpen]);
 
