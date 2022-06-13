@@ -10,3 +10,13 @@ export const playerState = atom({
     characterType: "police1",
   },
 });
+
+export const winnerState = atom({
+  key: "winnerState",
+  default: null,
+});
+
+export const robberCountState = atom({
+  key: "robberCountState",
+  default: 0,
+});

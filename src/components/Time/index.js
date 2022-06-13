@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import { timeState, winnerState } from "../../states/modal";
-import { socket } from "../../utils/socket";
+import { timeState } from "../../states/modal";
+import { winnerState } from "../../states/player";
 import styled from "styled-components";
 
 export default function Time() {
@@ -23,16 +23,10 @@ export default function Time() {
         clearInterval(countDown);
       }
 
-      socket.on("send-robber-counts", roleCounts => {
-        if (roleCounts.robber === 0) {
-          setIsShowingTime(false);
-          setIsResultModalOpen("police");
-          clearInterval(countDown);
-        }
-      });
-
       setRemainingTime(second);
     }, 1000);
+
+    return () => clearInterval(countDown);
   };
 
   useEffect(() => {
@@ -40,13 +34,11 @@ export default function Time() {
   }, []);
 
   return (
-    <div>
-      <TimeTicker>
-        <span>{"0" + Math.trunc(remainingTime / 60)}</span>
-        <span>:</span>
-        <span>{remainingTime % 60 > 9 ? remainingTime % 60 : "0" + (remainingTime % 60)}</span>
-      </TimeTicker>
-    </div>
+    <TimeTicker>
+      <span>{"0" + Math.trunc(remainingTime / 60)}</span>
+      <span>:</span>
+      <span>{remainingTime % 60 > 9 ? remainingTime % 60 : "0" + (remainingTime % 60)}</span>
+    </TimeTicker>
   );
 }
 
