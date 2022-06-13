@@ -36,4 +36,25 @@ export const socketApi = {
   returningSignalToConnectWebRTC: (signal, callerID) => {
     socket.emit("returning-signal-to-connect-webRTC", { signal, callerID });
   },
+  leaveRoom: (roomId, role, id, isHost) => {
+    socket.emit("leave-room", { roomId, role, id, isHost });
+  },
+  pressRunButton: roomId => {
+    socket.emit("press-run-button", roomId);
+  },
+  standbyRoom: roomId => {
+    socket.emit("standby-room", roomId);
+  },
+  findCurrentJoiningRoom: roomId => {
+    socket.emit("find-current-joining-room", roomId);
+  },
+  returningSignalToConnectWebRTC: payload => {
+    socket.emit("returning-signal-to-connect-webRTC", { signal: payload.signal, callerID: payload.callerID });
+  },
+  sendingSignalToConnectWebRTC: payload => {
+    socket.emit("sending-signal-to-connect-webRTC", { userToSignal: payload.userToSignal, callerID: payload.callerID, signal: payload.signal });
+  },
+  findCurrentJoiningRoom: roomId => {
+    socket.emit("find-current-joining-room", roomId);
+  },
 };
