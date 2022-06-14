@@ -33,6 +33,11 @@ export default class MainScene extends Scene {
     this.nicknameSprites[playerId].setVisible(false);
   }
 
+  playerLeaveGame(playerId) {
+    this.playerSprites[playerId].setVisible(false);
+    this.nicknameSprites[playerId].setVisible(false);
+  }
+
   preload() {
     this.load.image("background", background.game);
 
@@ -92,6 +97,7 @@ export default class MainScene extends Scene {
 
     if (this.role === "police") {
       this.physics.add.overlap(this.playerSprites[this.id], this.carGroup, this.collideCar, null, this);
+      this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.call, null, this);
     } else {
       this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.arrest, null, this);
     }
@@ -99,7 +105,7 @@ export default class MainScene extends Scene {
     this.cameras.main.setBounds(0, 0, 1920, 1080);
     this.cameras.main.startFollow(this.playerSprites[this.id], true, 0.09, 0.09);
 
-    this.cameras.main.setZoom(2);
+    this.cameras.main.setZoom(2.5);
   }
 
   createBackground() {
@@ -272,5 +278,22 @@ export default class MainScene extends Scene {
 
     this.cameras.main.startFollow(this.playerSprites[this.id], false, 0.09, 0.09);
     this.cameras.main.setZoom(1);
+  }
+
+  call(player, otherPlayer) {
+    const dis_x = player.x - otherPlayer.x;
+    const dis_y = player.y - otherPlayer.y;
+
+    const dist = Math.sqrt(Math.abs(dis_x * dis_x) + Math.abs(dis_y * dis_y));
+
+    dist > 62 ? this.openVideo() : this.closeVideo();
+  }
+
+  openVideo() {
+    socket.emit("close-video", this.roomId);
+  }
+
+  closeVideo() {
+    socket.emit("open-video", this.roomId);
   }
 }

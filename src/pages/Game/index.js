@@ -7,10 +7,10 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import Modal from "../Modal";
 import Video from "../../components/Video";
 import Time from "../../components/Time";
-import RobberCount from "../../components/RobberCount";
+import RobberCount from "../../components/RoleCount";
 
 import { preloadState, timeState } from "../../states/modal";
-import { playerState, robberCountState, winnerState } from "../../states/player";
+import { playerState, roleCountState, winnerState } from "../../states/player";
 
 import { socket, socketApi } from "../../utils/socket";
 import { characterSpriteSheet } from "../../constants/assets";
@@ -21,7 +21,7 @@ export default function Game() {
   const isPreloadModalOpen = useRecoilValue(preloadState);
   const isShowRemainingTime = useRecoilValue(timeState);
   const isResultModalOpen = useRecoilValue(winnerState);
-  const setRobberNumber = useSetRecoilState(robberCountState);
+  const setRoleCounts = useSetRecoilState(roleCountState);
 
   const player = useRecoilValue(playerState);
   const [isShowVideoComponent, setIsShowVideoComponent] = useState(false);
@@ -35,11 +35,11 @@ export default function Game() {
 
     socketApi.findCurrentJoiningRoom(roomId);
 
-    socket.on("send-current-joining-room", currentRoom => {
-      currentRoom.policeId.length > 1 && setIsShowVideoComponent(true);
+    socket.on("set-video", openVideo => {
+      setIsShowVideoComponent(openVideo);
     });
 
-    socket.on("send-room-players-info", (playersInfo, totalRobberArray) => {
+    socket.on("send-room-players-info", (playersInfo, policeIdArray, robberIdArray) => {
       const playerList = playersInfo.map(playerInfo => {
         playerInfo.characterPath = characterSpriteSheet[playerInfo.characterType];
 
@@ -48,15 +48,25 @@ export default function Game() {
 
       GameScene.initialize(player.id, player.role, roomId, playerList);
 
-      const totalRobberNumber = totalRobberArray.length;
+      const policeCount = policeIdArray.length;
+      const robberCount = robberIdArray.length;
 
-      setRobberNumber(totalRobberNumber);
+      setRoleCounts({ policeCount, robberCount });
     });
 
-    socket.on("send-arrested-player", (robberId, remainingRobberNumber) => {
-      setRobberNumber(remainingRobberNumber);
+    socket.on("send-arrested-player", (robberId, robberCount) => {
+      setRoleCounts({ robberCount });
 
       GameScene.makeRobberInvisible(robberId);
+    });
+
+    socket.on("send-left-player", (room, playerId) => {
+      GameScene.playerLeaveGame(playerId);
+
+      const policeCount = room.policeId.length;
+      const robberCount = room.robberId.length;
+
+      setRoleCounts({ policeCount, robberCount });
     });
   }, []);
 
@@ -75,6 +85,13 @@ export default function Game() {
       return () => clearTimeout(moveToMainScreen);
     }
   }, [isResultModalOpen]);
+
+  useEffect(() => {
+    return () => {
+      socketApi.leaveGame(roomId, player.id, player.role);
+      navigate("/");
+    };
+  }, []);
 
   return (
     <>

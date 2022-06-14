@@ -45,4 +45,7 @@ export const socketApi = {
   sendingSignalToConnectWebRTC: payload => {
     socket.emit("sending-signal-to-connect-webRTC", { userToSignal: payload.userToSignal, callerID: payload.callerID, signal: payload.signal });
   },
+  leaveGame: (roomId, playerId, playerRole) => {
+    socket.emit("leave-game", { roomId, playerId, playerRole });
+  },
 };
