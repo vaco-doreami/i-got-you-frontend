@@ -97,7 +97,7 @@ export default class MainScene extends Scene {
 
     if (this.role === "police") {
       this.physics.add.overlap(this.playerSprites[this.id], this.carGroup, this.collideCar, null, this);
-      this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.call, null, this);
+      this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.contactPolice, null, this);
     } else {
       this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.arrest, null, this);
     }
@@ -280,20 +280,12 @@ export default class MainScene extends Scene {
     this.cameras.main.setZoom(1);
   }
 
-  call(player, otherPlayer) {
-    const dis_x = player.x - otherPlayer.x;
-    const dis_y = player.y - otherPlayer.y;
+  contactPolice(player, otherPlayer) {
+    const distance_x = player.x - otherPlayer.x;
+    const distance_y = player.y - otherPlayer.y;
 
-    const dist = Math.sqrt(Math.abs(dis_x * dis_x) + Math.abs(dis_y * dis_y));
+    const distance = Math.sqrt(Math.abs(distance_x * distance_x) + Math.abs(distance_y * distance_y));
 
-    dist > 62 ? this.openVideo() : this.closeVideo();
-  }
-
-  openVideo() {
-    socket.emit("close-video", this.roomId);
-  }
-
-  closeVideo() {
-    socket.emit("open-video", this.roomId);
+    distance > 62 ? socketApi.closeVideo(this.roomId) : socketApi.openVideo(this.roomId);
   }
 }

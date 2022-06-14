@@ -25,8 +25,6 @@ export default function Video() {
             stream,
           });
 
-          console.log(peer);
-
           peer.on("signal", signal => {
             socketApi.sendingSignalToConnectWebRTC({ userToSignal: payload.policeId[1], callerID: socket.id, signal });
           });

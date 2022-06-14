@@ -48,4 +48,10 @@ export const socketApi = {
   leaveGame: (roomId, playerId, playerRole) => {
     socket.emit("leave-game", { roomId, playerId, playerRole });
   },
+  openVideo: roomId => {
+    socket.emit("close-video", roomId);
+  },
+  closeVideo: roomId => {
+    socket.emit("open-video", roomId);
+  },
 };
