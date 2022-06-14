@@ -1,20 +1,25 @@
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { winnerState, robberCountState } from "../../states/player";
+import { winnerState, roleCountState } from "../../states/player";
 import { timeState } from "../../states/modal";
 import styled from "styled-components";
 
 export default function RobberCount() {
-  const robberCounts = useRecoilValue(robberCountState);
+  const { policeCount, robberCount } = useRecoilValue(roleCountState);
   const setIsShowingTime = useSetRecoilState(timeState);
   const setIsResultModalOpen = useSetRecoilState(winnerState);
 
-  if (robberCounts === 0) {
+  if (policeCount === 0) {
+    setIsShowingTime(false);
+    setIsResultModalOpen("robber");
+  }
+
+  if (robberCount === 0) {
     setIsShowingTime(false);
     setIsResultModalOpen("police");
   }
 
-  return <RemainingRobber>남은 도둑 수 {robberCounts}</RemainingRobber>;
+  return <RemainingRobber>남은 도둑 수 {robberCount}</RemainingRobber>;
 }
 
 const RemainingRobber = styled.div`

@@ -29,12 +29,12 @@ export default function Video() {
             socketApi.sendingSignalToConnectWebRTC({ userToSignal: payload.policeId[1], callerID: socket.id, signal });
           });
 
-          peer.on("stream", stream => {
-            teamPlayerVideo.current.srcObject = stream;
-          });
-
           socket.on("receiving-returned-signal-to-connect-webRTC", payload => {
             peer.signal(payload.signal);
+          });
+
+          peer.on("stream", stream => {
+            teamPlayerVideo.current.srcObject = stream;
           });
         }
       });
@@ -50,11 +50,19 @@ export default function Video() {
           socketApi.returningSignalToConnectWebRTC({ signal, callerID: payload.callerID });
         });
 
-        teamPlayerVideo.current.srcObject = stream;
-
         peer.signal(payload.signal);
+
+        peer.on("stream", stream => {
+          teamPlayerVideo.current.srcObject = stream;
+        });
       });
     });
+
+    return () => {
+      socket.off("send-current-joining-room");
+      socket.off("new-video-chat-participant");
+      socket.off("receiving-returned-signal-to-connect-webRTC");
+    };
   }, []);
 
   return (
