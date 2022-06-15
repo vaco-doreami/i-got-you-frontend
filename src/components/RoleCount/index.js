@@ -14,6 +14,8 @@ export default function RobberCount() {
     setIsResultModalOpen("robber");
   }
 
+  // console.log(robberCount);
+
   if (robberCount === 0) {
     setIsShowingTime(false);
     setIsResultModalOpen("police");

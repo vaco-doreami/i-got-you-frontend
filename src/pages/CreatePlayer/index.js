@@ -7,6 +7,8 @@ import { socket, socketApi } from "../../utils/socket";
 import { playerState } from "../../states/player";
 import { characterImage as character } from "../../constants/assets";
 
+import { SEND_SOCKET_ID } from "../../constants/phaser";
+
 export default function CreatePlayer() {
   const [characterImages, setCharacterImages] = useState(character.filter(target => target.role === "police"));
   const [index, setIndex] = useState(0);
@@ -49,7 +51,7 @@ export default function CreatePlayer() {
       isHost: true,
     });
 
-    socket.on("send-socket-id", socketId => {
+    socket.on(SEND_SOCKET_ID, socketId => {
       setPlayer({
         ...player,
         id: socketId,
@@ -61,7 +63,7 @@ export default function CreatePlayer() {
   };
 
   const enterRoomList = () => {
-    socket.on("send-socket-id", socketId => {
+    socket.on(SEND_SOCKET_ID, socketId => {
       setPlayer({
         ...player,
         id: socketId,

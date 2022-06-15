@@ -1,57 +1,59 @@
 import io from "socket.io-client";
+import { ARREST_ROBBER, CLOSE_VIDEO, FIND_CURRENT_JOINING_ROOM, OPEN_VIDEO, PLAYER_MOVE, PLAYER_STOP, POLICE_OPACITY_CHANGED, RETURNING_SIGNAL_TO_CONNECT_WEBRTC, SENDING_SIGNAL_TO_CONNECT_WEBRTC } from "../constants/phaser";
+import { ASSIGN_ROOM_CREATOR_AS_HOST, ENTER_GAME, ENTER_ROOM_LIST, JOIN_ROOM, LEAVE_GAME, LEAVE_ROOM, PRESS_RUN_BUTTON, STANDBY } from "../constants/socket";
 
 export const socket = io.connect(process.env.REACT_APP_SERVER_URL);
 
 export const socketApi = {
   assignRoomCreatorAsHost: player => {
-    socket.emit("assign-room-creator-as-host", player);
+    socket.emit(ASSIGN_ROOM_CREATOR_AS_HOST, player);
   },
   enterRoomList: () => {
-    socket.emit("enter-room-list");
+    socket.emit(ENTER_ROOM_LIST);
   },
   joinRoom: (roomId, player) => {
-    socket.emit("join-room", roomId, player);
+    socket.emit(JOIN_ROOM, roomId, player);
   },
   enterGame: roomId => {
-    socket.emit("game-enter", roomId);
-  },
-  pressArrowKeys: (roomId, playerId, currentDirection, coordinateX, coordinateY) => {
-    socket.emit("player-move", { roomId, playerId, currentDirection, coordinateX, coordinateY });
-  },
-  offArrowKeys: (roomId, playerId, currentDirection, coordinateX, coordinateY) => {
-    socket.emit("player-stop", { roomId, playerId, currentDirection, coordinateX, coordinateY });
-  },
-  policeOpacityChanged: (roomId, playerId) => {
-    socket.emit("police-opacity-change", { roomId, playerId });
-  },
-  arrestRobber: (roomId, playerId) => {
-    socket.emit("arrest-robber", { roomId, playerId });
-  },
-  leaveRoom: (roomId, role, id, isHost) => {
-    socket.emit("leave-room", { roomId, role, id, isHost });
-  },
-  pressRunButton: roomId => {
-    socket.emit("press-run-button", roomId);
+    socket.emit(ENTER_GAME, roomId);
   },
   standby: roomId => {
-    socket.emit("standby", roomId);
+    socket.emit(STANDBY, roomId);
   },
-  findCurrentJoiningRoom: roomId => {
-    socket.emit("find-current-joining-room", roomId);
+  pressArrowKeys: (roomId, playerId, currentDirection, coordinateX, coordinateY) => {
+    socket.emit(PLAYER_MOVE, { roomId, playerId, currentDirection, coordinateX, coordinateY });
   },
-  returningSignalToConnectWebRTC: payload => {
-    socket.emit("returning-signal-to-connect-webRTC", { signal: payload.signal, callerID: payload.callerID });
+  offArrowKeys: (roomId, playerId, currentDirection, coordinateX, coordinateY) => {
+    socket.emit(PLAYER_STOP, { roomId, playerId, currentDirection, coordinateX, coordinateY });
   },
-  sendingSignalToConnectWebRTC: payload => {
-    socket.emit("sending-signal-to-connect-webRTC", { userToSignal: payload.userToSignal, callerID: payload.callerID, signal: payload.signal });
+  policeOpacityChanged: (roomId, playerId) => {
+    socket.emit(POLICE_OPACITY_CHANGED, { roomId, playerId });
+  },
+  arrestRobber: (roomId, playerId) => {
+    socket.emit(ARREST_ROBBER, { roomId, playerId });
+  },
+  leaveRoom: (roomId, role, id, isHost) => {
+    socket.emit(LEAVE_ROOM, { roomId, role, id, isHost });
+  },
+  pressRunButton: roomId => {
+    socket.emit(PRESS_RUN_BUTTON, roomId);
   },
   leaveGame: (roomId, playerId, playerRole) => {
-    socket.emit("leave-game", { roomId, playerId, playerRole });
+    socket.emit(LEAVE_GAME, { roomId, playerId, playerRole });
+  },
+  findCurrentJoiningRoom: roomId => {
+    socket.emit(FIND_CURRENT_JOINING_ROOM, roomId);
+  },
+  returningSignalToConnectWebRTC: payload => {
+    socket.emit(RETURNING_SIGNAL_TO_CONNECT_WEBRTC, { signal: payload.signal, callerID: payload.callerID });
+  },
+  sendingSignalToConnectWebRTC: payload => {
+    socket.emit(SENDING_SIGNAL_TO_CONNECT_WEBRTC, { userToSignal: payload.userToSignal, callerID: payload.callerID, signal: payload.signal });
   },
   openVideo: roomId => {
-    socket.emit("close-video", roomId);
+    socket.emit(OPEN_VIDEO, roomId);
   },
   closeVideo: roomId => {
-    socket.emit("open-video", roomId);
+    socket.emit(CLOSE_VIDEO, roomId);
   },
 };

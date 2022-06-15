@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { socket } from "../../utils/socket";
 import { useRecoilValue } from "recoil";
+import { socket, socketApi } from "../../utils/socket";
 import { playerState } from "../../states/player";
-import { socketApi } from "../../utils/socket";
 import styled from "styled-components";
 
 export default function Standby() {
@@ -15,18 +14,14 @@ export default function Standby() {
   useEffect(() => {
     socketApi.standby(roomId);
 
-    socket.on("receive-player", roomRoleCount => {
-      setRoleCount(roomRoleCount);
-    });
+    socket.on("receive-player", roomRoleCount => setRoleCount(roomRoleCount));
 
     socket.on("change-all-player-scene", () => navigate(`/game/${roomId}`));
 
     socket.on("leave-room-player-redirect-room-list", () => navigate("/room/list"));
   }, []);
 
-  const pressRunButton = roomId => {
-    socketApi.pressRunButton(roomId);
-  };
+  const pressRunButton = roomId => socketApi.pressRunButton(roomId);
 
   const pressLeaveRoomButton = (roomId, role, id, isHost) => {
     socketApi.leaveRoom(roomId, role, id, isHost);
@@ -36,7 +31,7 @@ export default function Standby() {
     <div className="main-background">
       <StandbyWrap>
         <img
-          src="/images/button/exit.png"
+          src="/images/button/leave.png"
           alt="leave_btn_images"
           onClick={() => {
             pressLeaveRoomButton(roomId, role, id, isHost);

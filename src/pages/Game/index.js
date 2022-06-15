@@ -17,6 +17,8 @@ import { characterSpriteSheet } from "../../constants/assets";
 import { GameScene } from "../../phaser/config";
 import { config } from "../../phaser/config";
 
+import { SEND_ARRESTED_PLAYER, SEND_LEFT_PLAYER, SEND_ROOM_PLAYERS_INFORMATION, SET_VIDEO } from "../../constants/phaser";
+
 export default function Game() {
   const isPreloadModalOpen = useRecoilValue(preloadState);
   const isShowRemainingTime = useRecoilValue(timeState);
@@ -35,11 +37,11 @@ export default function Game() {
 
     socketApi.findCurrentJoiningRoom(roomId);
 
-    socket.on("set-video", openVideo => {
+    socket.on(SET_VIDEO, openVideo => {
       setIsShowVideoComponent(openVideo);
     });
 
-    socket.on("send-room-players-info", (playersInfo, policeIdArray, robberIdArray) => {
+    socket.on(SEND_ROOM_PLAYERS_INFORMATION, (playersInfo, policeIdArray, robberIdArray) => {
       const playerList = playersInfo.map(playerInfo => {
         playerInfo.characterPath = characterSpriteSheet[playerInfo.characterType];
 
@@ -54,13 +56,13 @@ export default function Game() {
       setRoleCounts({ policeCount, robberCount });
     });
 
-    socket.on("send-arrested-player", (robberId, robberCount) => {
+    socket.on(SEND_ARRESTED_PLAYER, (robberId, robberCount) => {
       setRoleCounts({ robberCount });
 
       GameScene.makeRobberInvisible(robberId);
     });
 
-    socket.on("send-left-player", (room, playerId) => {
+    socket.on(SEND_LEFT_PLAYER, (room, playerId) => {
       GameScene.playerLeaveGame(playerId);
 
       const policeCount = room.policeId.length;
