@@ -1,23 +1,23 @@
 export const characterImage = [
-  { role: "police", alias: "police1", path: "/images/character/man-police.png" },
-  { role: "police", alias: "police2", path: "/images/character/woman-police.png" },
-  { role: "robber", alias: "robber1", path: "/images/character/bald-robber.png" },
-  { role: "robber", alias: "robber2", path: "/images/character/beanie-hat-robber.png" },
-  { role: "robber", alias: "robber3", path: "/images/character/bomb-head-robber.png" },
-  { role: "robber", alias: "robber4", path: "/images/character/cloth-on-head-robber.png" },
-  { role: "robber", alias: "robber5", path: "/images/character/long-hair-robber.png" },
-  { role: "robber", alias: "robber6", path: "/images/character/red-hair-robber.png" },
+  { role: "police", alias: "police1", path: "/images/characterImage/man-police.png" },
+  { role: "police", alias: "police2", path: "/images/characterImage/woman-police.png" },
+  { role: "robber", alias: "robber1", path: "/images/characterImage/bald-robber.png" },
+  { role: "robber", alias: "robber2", path: "/images/characterImage/beanie-robber.png" },
+  { role: "robber", alias: "robber3", path: "/images/characterImage/bomb-robber.png" },
+  { role: "robber", alias: "robber4", path: "/images/characterImage/ninja-robber.png" },
+  { role: "robber", alias: "robber5", path: "/images/characterImage/long-hair-robber.png" },
+  { role: "robber", alias: "robber6", path: "/images/characterImage/red-hair-robber.png" },
 ];
 
 export const characterSpriteSheet = {
-  police1: "/images/characterSprite/man-police.png",
-  police2: "/images/characterSprite/woman-police.png",
-  robber1: "/images/characterSprite/bald-robber.png",
-  robber2: "/images/characterSprite/beanie-hat-robber.png",
-  robber3: "/images/characterSprite/bomb-head-robber.png",
-  robber4: "/images/characterSprite/cloth-on-head-robber.png",
-  robber5: "/images/characterSprite/long-hair-robber.png",
-  robber6: "/images/characterSprite/red-hair-robber.png",
+  police1: "/images/characterSpriteSheet/man-police.png",
+  police2: "/images/characterSpriteSheet/woman-police.png",
+  robber1: "/images/characterSpriteSheet/bald-robber.png",
+  robber2: "/images/characterSpriteSheet/beanie-robber.png",
+  robber3: "/images/characterSpriteSheet/bomb-robber.png",
+  robber4: "/images/characterSpriteSheet/ninja-robber.png",
+  robber5: "/images/characterSpriteSheet/long-hair-robber.png",
+  robber6: "/images/characterSpriteSheet/red-hair-robber.png",
 };
 
 export const background = {
@@ -25,8 +25,8 @@ export const background = {
 };
 
 export const obstacle = {
-  bluecar: "/images/car/blue-car.png",
-  greencar: "/images/car/green-car.png",
-  redcar: "/images/car/red-car.png",
-  yellowcar: "/images/car/yellow-car.png",
+  bluecar: "/images/obstacle/car-blue.png",
+  greencar: "/images/obstacle/car-green.png",
+  redcar: "/images/obstacle/car-red.png",
+  yellowcar: "/images/obstacle/car-yellow.png",
 };

@@ -13,7 +13,7 @@ export default function Standby() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    socketApi.standbyRoom(roomId);
+    socketApi.standby(roomId);
 
     socket.on("receive-player", roomRoleCount => {
       setRoleCount(roomRoleCount);
@@ -36,7 +36,7 @@ export default function Standby() {
     <div className="main-background">
       <StandbyWrap>
         <img
-          src="/images/leave.png"
+          src="/images/button/exit.png"
           alt="leave_btn_images"
           onClick={() => {
             pressLeaveRoomButton(roomId, role, id, isHost);

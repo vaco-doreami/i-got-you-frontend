@@ -1,9 +1,8 @@
-import { useEffect, useRef } from "react";
-import styled from "styled-components";
-import { socket, socketApi } from "../../utils/socket";
-
 import Peer from "simple-peer";
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { socket, socketApi } from "../../utils/socket";
+import styled from "styled-components";
 
 export default function Video() {
   const { roomId } = useParams();

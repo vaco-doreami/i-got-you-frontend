@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { winnerState, roleCountState } from "../../states/player";
-import { timeState } from "../../states/modal";
+import { winnerState, timeState } from "../../states/modal";
+import { roleCountState } from "../../states/player";
 import styled from "styled-components";
 
 export default function RobberCount() {

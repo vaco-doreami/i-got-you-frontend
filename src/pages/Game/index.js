@@ -9,8 +9,8 @@ import Video from "../../components/Video";
 import Time from "../../components/Time";
 import RobberCount from "../../components/RoleCount";
 
-import { preloadState, timeState } from "../../states/modal";
-import { playerState, roleCountState, winnerState } from "../../states/player";
+import { preloadState, timeState, winnerState } from "../../states/modal";
+import { playerState, roleCountState } from "../../states/player";
 
 import { socket, socketApi } from "../../utils/socket";
 import { characterSpriteSheet } from "../../constants/assets";
@@ -103,7 +103,7 @@ export default function Game() {
           <RobberCount />
         </div>
       )}
-      {isResultModalOpen && <Modal type="showResult" />}
+      {isResultModalOpen && <Modal type="result" />}
     </>
   );
 }

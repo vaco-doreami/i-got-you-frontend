@@ -4,7 +4,6 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 import { playerState } from "../../states/player";
-
 import { socket, socketApi } from "../../utils/socket";
 
 export default function RoomList() {
@@ -49,7 +48,7 @@ export default function RoomList() {
                         navigate(`/room/${roomId}`);
                       }
                     }
-                  }}
+                  }} // 리팩토링 가능할 듯
                 >{`경찰 ${roomsMembers[roomId].policeId.length} / 도둑 ${roomsMembers[roomId].robberId.length}`}</span>
               </li>
             )

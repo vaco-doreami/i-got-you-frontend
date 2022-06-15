@@ -3,8 +3,8 @@ import io from "socket.io-client";
 export const socket = io.connect(process.env.REACT_APP_SERVER_URL);
 
 export const socketApi = {
-  sendHostInfo: player => {
-    socket.emit("create-room", player);
+  assignRoomCreatorAsHost: player => {
+    socket.emit("assign-room-creator-as-host", player);
   },
   enterRoomList: () => {
     socket.emit("enter-room-list");
@@ -33,8 +33,8 @@ export const socketApi = {
   pressRunButton: roomId => {
     socket.emit("press-run-button", roomId);
   },
-  standbyRoom: roomId => {
-    socket.emit("standby-room", roomId);
+  standby: roomId => {
+    socket.emit("standby", roomId);
   },
   findCurrentJoiningRoom: roomId => {
     socket.emit("find-current-joining-room", roomId);
