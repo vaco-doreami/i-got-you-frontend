@@ -29,6 +29,7 @@ export default function RoomList() {
               ""
             ) : (
               <li key={roomId}>
+                <p className="roomTitle">{roomsMembers[roomId].roomTitle}</p>
                 <span
                   onClick={() => {
                     if (player.role === "police") {
@@ -89,9 +90,20 @@ const RoomListWrap = styled.div`
     background: #1a73e8;
   }
 
+  li {
+    position: relative;
+  }
+
   li:last-child {
     a {
       margin-bottom: 0;
     }
+  }
+
+  .roomTitle {
+    position: absolute;
+    font-weight: bold;
+    top: 21px;
+    left: 20px;
   }
 `;

@@ -5,8 +5,8 @@ import { ARREST_ROBBER, POLICE_OPACITY_CHANGED, FIND_CURRENT_JOINING_ROOM, OPEN_
 export const socket = io.connect(process.env.REACT_APP_SERVER_URL);
 
 export const socketApi = {
-  assignRoomCreatorAsHost: player => {
-    socket.emit(ASSIGN_ROOM_CREATOR_AS_HOST, player);
+  assignRoomCreatorAsHost: (player, roomTitle) => {
+    socket.emit(ASSIGN_ROOM_CREATOR_AS_HOST, player, roomTitle);
   },
   enterRoomList: () => {
     socket.emit(ENTER_ROOM_LIST);

@@ -7,11 +7,15 @@ import { characterImage as character } from "../../constants/assets";
 import { SEND_SOCKET_ID } from "../../constants/phaser";
 import { socket, socketApi } from "../../utils/socket";
 import { playerState } from "../../states/player";
+import { roomTitleState } from "../../states/modal";
+
+import Modal from "../Modal";
 
 export default function CreatePlayer() {
   const [characterImages, setCharacterImages] = useState(character.filter(target => target.role === "police"));
   const [index, setIndex] = useState(0);
   const [player, setPlayer] = useRecoilState(playerState);
+  const [isShowRoomTitle, setIsShowRoomTitle] = useRecoilState(roomTitleState);
   const navigate = useNavigate();
 
   const handleRoleChange = e => {
@@ -44,10 +48,13 @@ export default function CreatePlayer() {
     });
   }, [index, characterImages]);
 
-  const createRoom = () => {
-    socketApi.assignRoomCreatorAsHost({
-      ...player,
-    });
+  const createRoom = roomTitle => {
+    socketApi.assignRoomCreatorAsHost(
+      {
+        ...player,
+      },
+      roomTitle
+    );
 
     socket.on(SEND_SOCKET_ID, socketId => {
       setPlayer({
@@ -84,7 +91,7 @@ export default function CreatePlayer() {
 
   const handleRoomEntryClick = e => {
     if (e.target.name === "create-room") {
-      player.nickname.length === 0 ? alert("이름을 작성해주세요.") : createRoom();
+      player.nickname.length === 0 ? alert("이름을 작성해주세요.") : setIsShowRoomTitle(true);
     }
 
     if (e.target.name === "enter-room-list") {
@@ -93,38 +100,41 @@ export default function CreatePlayer() {
   };
 
   return (
-    <div className="main-background">
-      <CreatePlayerWrap>
-        <h3 className="title">캐릭터 생성</h3>
-        <div>
-          <p>이름</p>
-          <input type="text" maxLength="5" onChange={handleNicknameChange} />
-        </div>
-        <div>
-          <p>직업</p>
-          <select onChange={handleRoleChange}>
-            <option value="police">경찰</option>
-            <option value="robber">도둑</option>
-          </select>
-        </div>
-        <div>
-          <p>캐릭터선택</p>
-          <div className="select-character-area">
-            <button className="previous" name="previous" type="button" onClick={handleArrowClick} />
-            <img src={characterImages[index].path} alt={characterImages[index].alias} />
-            <button className="next" name="next" type="button" onClick={handleArrowClick} />
+    <>
+      <div className="main-background">
+        <CreatePlayerWrap>
+          <h3 className="title">캐릭터 생성</h3>
+          <div>
+            <p>이름</p>
+            <input type="text" maxLength="5" onChange={handleNicknameChange} />
           </div>
-        </div>
-        <p className="btn-wrap">
-          <button name="create-room" onClick={handleRoomEntryClick}>
-            방 만들기
-          </button>
-          <button name="enter-room-list" onClick={handleRoomEntryClick}>
-            방 리스트
-          </button>
-        </p>
-      </CreatePlayerWrap>
-    </div>
+          <div>
+            <p>역할</p>
+            <select onChange={handleRoleChange}>
+              <option value="police">경찰</option>
+              <option value="robber">도둑</option>
+            </select>
+          </div>
+          <div>
+            <p>캐릭터선택</p>
+            <div className="select-character-area">
+              <button className="previous" name="previous" type="button" onClick={handleArrowClick} />
+              <img src={characterImages[index].path} alt={characterImages[index].alias} />
+              <button className="next" name="next" type="button" onClick={handleArrowClick} />
+            </div>
+          </div>
+          <p className="btn-wrap">
+            <button name="create-room" onClick={handleRoomEntryClick}>
+              방 만들기
+            </button>
+            <button name="enter-room-list" onClick={handleRoomEntryClick}>
+              방 리스트
+            </button>
+          </p>
+        </CreatePlayerWrap>
+      </div>
+      {isShowRoomTitle && <Modal type="roomTitle" createRoom={createRoom} setIsShowRoomTitle={setIsShowRoomTitle} />}
+    </>
   );
 }
 
