@@ -11,11 +11,6 @@ export const playerState = atom({
   },
 });
 
-export const winnerState = atom({
-  key: "winnerState",
-  default: null,
-});
-
 export const roleCountState = atom({
   key: "roleCountState",
   default: {

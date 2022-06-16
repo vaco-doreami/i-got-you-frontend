@@ -1,0 +1,9 @@
+export const ASSIGN_ROOM_CREATOR_AS_HOST = "assign-room-creator-as-host";
+export const ENTER_ROOM_LIST = "enter-room-list";
+export const ENTER_GAME = "enter-game";
+export const JOIN_ROOM = "join-room";
+export const STANDBY = "standby";
+export const HANDLE_RUN_BUTTON = "handle-run-button";
+export const SEND_ROOMS = "send-rooms";
+export const LEAVE_ROOM = "leave-room";
+export const LEAVE_GAME = "leave-game";

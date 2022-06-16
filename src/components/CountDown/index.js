@@ -1,34 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { preloadState, timeState } from "../../states/modal";
+import { useInterval } from "../../utils/hooks/useInterval";
 import styled from "styled-components";
 
 export default function CountDown() {
-  const [countDownSeconds, setCountDownSeconds] = useState(3);
   const setIsModalOpen = useSetRecoilState(preloadState);
   const setIsTimeShowing = useSetRecoilState(timeState);
 
-  let second = countDownSeconds;
+  let [countdown, setCountdown] = useState(3);
 
-  const startCountDown = () => {
-    const countDown = setInterval(() => {
-      second -= 1;
+  useInterval(() => {
+    if (countdown === 1) {
+      setIsModalOpen(false);
+      setIsTimeShowing(true);
+    }
 
-      if (second === 0) {
-        setIsModalOpen(false);
-        setIsTimeShowing(true);
-        clearInterval(countDown);
-      }
+    setCountdown(countdown => countdown - 1);
+  }, 1000);
 
-      setCountDownSeconds(second);
-    }, 1000);
-  };
-
-  useEffect(() => {
-    startCountDown();
-  }, []);
-
-  return <Time>{countDownSeconds}</Time>;
+  return <Time>{countdown}</Time>;
 }
 
 const Time = styled.div`

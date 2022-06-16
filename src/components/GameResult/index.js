@@ -1,6 +1,7 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { winnerState, playerState } from "../../states/player";
+import { winnerState } from "../../states/modal";
+import { playerState } from "../../states/player";
 import styled from "styled-components";
 
 export default function GameResult() {

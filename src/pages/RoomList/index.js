@@ -4,7 +4,6 @@ import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 import { playerState } from "../../states/player";
-
 import { socket, socketApi } from "../../utils/socket";
 
 export default function RoomList() {

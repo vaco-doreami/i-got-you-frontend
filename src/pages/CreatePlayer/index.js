@@ -1,56 +1,40 @@
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
+import { characterImage as character } from "../../constants/assets";
+import { SEND_SOCKET_ID } from "../../constants/phaser";
 import { socket, socketApi } from "../../utils/socket";
 import { playerState } from "../../states/player";
-import { characterImage } from "../../constants/assets";
 
 export default function CreatePlayer() {
-  const [characterImages, setCharacterImages] = useState(characterImage.filter(target => target.role === "police"));
+  const [characterImages, setCharacterImages] = useState(character.filter(target => target.role === "police"));
   const [index, setIndex] = useState(0);
   const [player, setPlayer] = useRecoilState(playerState);
   const navigate = useNavigate();
 
-  const roleChange = e => {
-    if (e.target.value === "police") {
-      setIndex(0);
-      setCharacterImages(characterImage.filter(target => target.role === "police"));
-    }
+  const handleRoleChange = e => {
+    const role = e.target.value;
 
-    if (e.target.value === "robber") {
-      setIndex(0);
-      setCharacterImages(characterImage.filter(target => target.role === "robber"));
-    }
+    const policeOrRobber = character.filter(target => target.role === role);
+
+    setIndex(0);
+    setCharacterImages(policeOrRobber);
 
     setPlayer({
       ...player,
-      role: e.target.value,
+      role,
     });
   };
 
-  const nicknameChange = e => {
+  const handleNicknameChange = e => {
+    const nickname = e.target.value;
+
     setPlayer({
       ...player,
-      nickname: e.target.value,
+      nickname,
     });
-  };
-
-  const prevClick = () => {
-    if (index === 0) {
-      setIndex(characterImages.length - 1);
-    } else {
-      setIndex(index - 1);
-    }
-  };
-
-  const nextClick = () => {
-    if (index === characterImages.length - 1) {
-      setIndex(0);
-    } else {
-      setIndex(index + 1);
-    }
   };
 
   useEffect(() => {
@@ -61,12 +45,12 @@ export default function CreatePlayer() {
   }, [index, characterImages]);
 
   const createRoom = () => {
-    socketApi.sendHostInfo({
+    socketApi.assignRoomCreatorAsHost({
       ...player,
       isHost: true,
     });
 
-    socket.on("send-socket-id", socketId => {
+    socket.on(SEND_SOCKET_ID, socketId => {
       setPlayer({
         ...player,
         id: socketId,
@@ -78,7 +62,7 @@ export default function CreatePlayer() {
   };
 
   const enterRoomList = () => {
-    socket.on("send-socket-id", socketId => {
+    socket.on(SEND_SOCKET_ID, socketId => {
       setPlayer({
         ...player,
         id: socketId,
@@ -88,17 +72,39 @@ export default function CreatePlayer() {
     navigate("/room/list");
   };
 
+  const handleArrowClick = e => {
+    const last = characterImages.length - 1;
+
+    if (e.target.name === "previous") {
+      index === 0 ? setIndex(last) : setIndex(index - 1);
+    }
+
+    if (e.target.name === "next") {
+      index === last ? setIndex(0) : setIndex(index + 1);
+    }
+  };
+
+  const handleRoomEntryClick = e => {
+    if (e.target.name === "create-room") {
+      player.nickname.length === 0 ? alert("이름을 작성해주세요.") : createRoom();
+    }
+
+    if (e.target.name === "enter-room-list") {
+      player.nickname.length === 0 ? alert("이름을 작성해주세요.") : enterRoomList();
+    }
+  };
+
   return (
     <div className="main-background">
       <CreatePlayerWrap>
         <h3 className="title">캐릭터 생성</h3>
         <div>
           <p>이름</p>
-          <input type="text" maxLength="5" onChange={nicknameChange} />
+          <input type="text" maxLength="5" onChange={handleNicknameChange} />
         </div>
         <div>
           <p>직업</p>
-          <select onChange={roleChange}>
+          <select onChange={handleRoleChange}>
             <option value="police">경찰</option>
             <option value="robber">도둑</option>
           </select>
@@ -106,24 +112,16 @@ export default function CreatePlayer() {
         <div>
           <p>캐릭터선택</p>
           <div className="select-character-area">
-            <button className="prev" onClick={prevClick} />
+            <button className="previous" name="previous" type="button" onClick={handleArrowClick} />
             <img src={characterImages[index].path} alt={characterImages[index].alias} />
-            <button className="next" onClick={nextClick} />
+            <button className="next" name="next" type="button" onClick={handleArrowClick} />
           </div>
         </div>
         <p className="btn-wrap">
-          <button
-            onClick={() => {
-              player.nickname.length === 0 ? alert("이름을 작성해주세요.") : createRoom();
-            }}
-          >
+          <button name="create-room" onClick={handleRoomEntryClick}>
             방 만들기
           </button>
-          <button
-            onClick={() => {
-              player.nickname.length === 0 ? alert("이름을 작성해주세요.") : enterRoomList();
-            }}
-          >
+          <button name="enter-room-list" onClick={handleRoomEntryClick}>
             방 리스트
           </button>
         </p>
@@ -178,10 +176,10 @@ const CreatePlayerWrap = styled.div`
         width: 10px;
         height: 13px;
         border: none;
-        background: url("/images/arrow.png") no-repeat center center / 100% 100%;
+        background: url("/images/button/arrow.png") no-repeat center center / 100% 100%;
       }
 
-      .prev {
+      .previous {
         transform: rotate(-180deg);
       }
     }

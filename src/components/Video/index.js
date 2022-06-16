@@ -1,9 +1,8 @@
-import { useEffect, useRef } from "react";
-import styled from "styled-components";
-import { socket, socketApi } from "../../utils/socket";
-
 import Peer from "simple-peer";
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { socket, socketApi } from "../../utils/socket";
+import styled from "styled-components";
 
 export default function Video() {
   const { roomId } = useParams();
@@ -13,49 +12,51 @@ export default function Video() {
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-      userVideo.current.srcObject = stream;
+      if (userVideo.current) {
+        userVideo.current.srcObject = stream;
 
-      socketApi.findCurrentJoiningRoom(roomId);
+        socketApi.findCurrentJoiningRoom(roomId);
 
-      socket.on("send-current-joining-room", payload => {
-        if (socket.id === payload.policeId[0]) {
+        socket.on("send-current-joining-room", payload => {
+          if (socket.id === payload.policeId[0]) {
+            const peer = new Peer({
+              initiator: true,
+              trickle: false,
+              stream,
+            });
+
+            peer.on("signal", signal => {
+              socketApi.sendingSignalToConnectWebRTC({ userToSignal: payload.policeId[1], callerID: socket.id, signal });
+            });
+
+            socket.on("receiving-returned-signal-to-connect-webRTC", payload => {
+              peer.signal(payload.signal);
+            });
+
+            peer.on("stream", stream => {
+              teamPlayerVideo.current.srcObject = stream;
+            });
+          }
+        });
+
+        socket.on("new-video-chat-participant", payload => {
           const peer = new Peer({
-            initiator: true,
+            initiator: false,
             trickle: false,
             stream,
           });
 
           peer.on("signal", signal => {
-            socketApi.sendingSignalToConnectWebRTC({ userToSignal: payload.policeId[1], callerID: socket.id, signal });
+            socketApi.returningSignalToConnectWebRTC({ signal, callerID: payload.callerID });
           });
 
-          socket.on("receiving-returned-signal-to-connect-webRTC", payload => {
-            peer.signal(payload.signal);
-          });
+          peer.signal(payload.signal);
 
           peer.on("stream", stream => {
             teamPlayerVideo.current.srcObject = stream;
           });
-        }
-      });
-
-      socket.on("new-video-chat-participant", payload => {
-        const peer = new Peer({
-          initiator: false,
-          trickle: false,
-          stream,
         });
-
-        peer.on("signal", signal => {
-          socketApi.returningSignalToConnectWebRTC({ signal, callerID: payload.callerID });
-        });
-
-        peer.signal(payload.signal);
-
-        peer.on("stream", stream => {
-          teamPlayerVideo.current.srcObject = stream;
-        });
-      });
+      }
     });
 
     return () => {
