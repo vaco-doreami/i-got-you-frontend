@@ -1,6 +1,6 @@
 import io from "socket.io-client";
-import { ARREST_ROBBER, CLOSE_VIDEO, FIND_CURRENT_JOINING_ROOM, OPEN_VIDEO, PLAYER_MOVE, PLAYER_STOP, POLICE_OPACITY_CHANGED, RETURNING_SIGNAL_TO_CONNECT_WEBRTC, SENDING_SIGNAL_TO_CONNECT_WEBRTC } from "../constants/phaser";
-import { ASSIGN_ROOM_CREATOR_AS_HOST, ENTER_GAME, ENTER_ROOM_LIST, JOIN_ROOM, LEAVE_GAME, LEAVE_ROOM, PRESS_RUN_BUTTON, STANDBY } from "../constants/socket";
+import { ASSIGN_ROOM_CREATOR_AS_HOST, ENTER_GAME, ENTER_ROOM_LIST, JOIN_ROOM, LEAVE_ROOM, LEAVE_GAME, HANDLE_RUN_BUTTON, STANDBY } from "../constants/socket";
+import { ARREST_ROBBER, POLICE_OPACITY_CHANGED, FIND_CURRENT_JOINING_ROOM, OPEN_VIDEO, CLOSE_VIDEO, PLAYER_MOVE, PLAYER_STOP, RETURNING_SIGNAL_TO_CONNECT_WEBRTC, SENDING_SIGNAL_TO_CONNECT_WEBRTC } from "../constants/phaser";
 
 export const socket = io.connect(process.env.REACT_APP_SERVER_URL);
 
@@ -35,8 +35,8 @@ export const socketApi = {
   leaveRoom: (roomId, role, id, isHost) => {
     socket.emit(LEAVE_ROOM, { roomId, role, id, isHost });
   },
-  pressRunButton: roomId => {
-    socket.emit(PRESS_RUN_BUTTON, roomId);
+  handleRunButton: roomId => {
+    socket.emit(HANDLE_RUN_BUTTON, roomId);
   },
   leaveGame: (roomId, playerId, playerRole) => {
     socket.emit(LEAVE_GAME, { roomId, playerId, playerRole });
@@ -45,10 +45,14 @@ export const socketApi = {
     socket.emit(FIND_CURRENT_JOINING_ROOM, roomId);
   },
   returningSignalToConnectWebRTC: payload => {
-    socket.emit(RETURNING_SIGNAL_TO_CONNECT_WEBRTC, { signal: payload.signal, callerID: payload.callerID });
+    const { signal, callerID } = payload;
+
+    socket.emit(RETURNING_SIGNAL_TO_CONNECT_WEBRTC, { signal, callerID });
   },
   sendingSignalToConnectWebRTC: payload => {
-    socket.emit(SENDING_SIGNAL_TO_CONNECT_WEBRTC, { userToSignal: payload.userToSignal, callerID: payload.callerID, signal: payload.signal });
+    const { userToSignal, signal, callerID } = payload;
+
+    socket.emit(SENDING_SIGNAL_TO_CONNECT_WEBRTC, { userToSignal, signal, callerID });
   },
   openVideo: roomId => {
     socket.emit(OPEN_VIDEO, roomId);

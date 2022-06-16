@@ -12,11 +12,11 @@ export default class MainScene extends Scene {
     this.id = null;
     this.role = null;
     this.roomId = null;
+    this.isStart = false;
     this.playerList = [];
     this.playerSprites = {};
     this.nicknameSprites = {};
     this.currentDirection = "stop";
-    this.isStart = false;
   }
 
   initialize(id, role, roomId, playerList) {
@@ -111,8 +111,8 @@ export default class MainScene extends Scene {
   }
 
   createBackground() {
-    const background = this.add.image(960, 540, "background");
-    background.depth = -1;
+    this.background = this.add.image(960, 540, "background");
+    this.background.depth = -1;
   }
 
   createCars() {

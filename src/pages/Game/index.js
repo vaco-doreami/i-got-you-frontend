@@ -1,7 +1,6 @@
 import Phaser from "phaser";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 import Modal from "../Modal";
@@ -26,7 +25,7 @@ export default function Game() {
   const setRoleCounts = useSetRecoilState(roleCountState);
 
   const player = useRecoilValue(playerState);
-  const [isShowVideoComponent, setIsShowVideoComponent] = useState(false);
+  const [isShowVideo, setIsShowVideo] = useState(false);
   const { roomId } = useParams();
   const navigate = useNavigate();
 
@@ -38,7 +37,7 @@ export default function Game() {
     socketApi.findCurrentJoiningRoom(roomId);
 
     socket.on(SET_VIDEO, openVideo => {
-      setIsShowVideoComponent(openVideo);
+      setIsShowVideo(openVideo);
     });
 
     socket.on(SEND_ROOM_PLAYERS_INFORMATION, (playersInfo, policeIdArray, robberIdArray) => {
@@ -81,7 +80,9 @@ export default function Game() {
   useEffect(() => {
     if (isResultModalOpen) {
       const moveToMainScreen = setTimeout(() => {
+        GameScene.sys.destroy(true);
         navigate("/");
+        window.location.reload();
       }, 5000);
 
       return () => clearTimeout(moveToMainScreen);
@@ -91,13 +92,14 @@ export default function Game() {
   useEffect(() => {
     return () => {
       socketApi.leaveGame(roomId, player.id, player.role);
+
       navigate("/");
     };
   }, []);
 
   return (
     <>
-      {player.role === "police" && isShowVideoComponent && <Video />}
+      {player.role === "police" && isShowVideo && <Video />}
       {isPreloadModalOpen && <Modal type="preload" />}
       {isShowRemainingTime && (
         <div>

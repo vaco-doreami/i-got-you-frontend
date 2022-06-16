@@ -1,25 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { winnerState, timeState } from "../../states/modal";
 import { roleCountState } from "../../states/player";
 import styled from "styled-components";
 
-export default function RobberCount() {
+export default function RoleCount() {
   const { policeCount, robberCount } = useRecoilValue(roleCountState);
   const setIsShowingTime = useSetRecoilState(timeState);
   const setIsResultModalOpen = useSetRecoilState(winnerState);
 
-  if (policeCount === 0) {
-    setIsShowingTime(false);
-    setIsResultModalOpen("robber");
-  }
+  useEffect(() => {
+    if (policeCount === 0) {
+      setIsShowingTime(false);
+      setIsResultModalOpen("robber");
+    }
 
-  // console.log(robberCount);
-
-  if (robberCount === 0) {
-    setIsShowingTime(false);
-    setIsResultModalOpen("police");
-  }
+    if (robberCount === 0) {
+      setIsShowingTime(false);
+      setIsResultModalOpen("police");
+    }
+  }, [robberCount]);
 
   return <RemainingRobber>남은 도둑 수 {robberCount}</RemainingRobber>;
 }

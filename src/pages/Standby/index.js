@@ -21,9 +21,11 @@ export default function Standby() {
     socket.on("leave-room-player-redirect-room-list", () => navigate("/room/list"));
   }, []);
 
-  const pressRunButton = roomId => socketApi.pressRunButton(roomId);
+  const handleRunButton = roomId => {
+    socketApi.handleRunButton(roomId);
+  };
 
-  const pressLeaveRoomButton = (roomId, role, id, isHost) => {
+  const handleExitButton = (roomId, role, id, isHost) => {
     socketApi.leaveRoom(roomId, role, id, isHost);
   };
 
@@ -32,9 +34,9 @@ export default function Standby() {
       <StandbyWrap>
         <img
           src="/images/button/leave.png"
-          alt="leave_btn_images"
+          alt="leave-button-images"
           onClick={() => {
-            pressLeaveRoomButton(roomId, role, id, isHost);
+            handleExitButton(roomId, role, id, isHost);
           }}
         />
         <p className="description">Waiting for other players . . .</p>
@@ -42,11 +44,12 @@ export default function Standby() {
           <p>경찰 {roleCount.police}</p>
           <p>도둑 {roleCount.robber}</p>
         </div>
-        <div className="game-start-btn-wrap">
+        <div className="game-start-button-wrap">
           {roleCount.police > 0 && roleCount.robber > 0 && isHost && (
             <button
+              type="button"
               onClick={() => {
-                pressRunButton(roomId);
+                handleRunButton(roomId);
               }}
             >
               Run!
@@ -86,7 +89,7 @@ const StandbyWrap = styled.div`
     }
   }
 
-  .game-start-btn-wrap {
+  .game-start-button-wrap {
     text-align: center;
 
     button {
