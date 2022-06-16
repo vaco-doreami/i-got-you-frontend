@@ -7,7 +7,8 @@ import styled from "styled-components";
 
 export default function Standby() {
   const [roleCount, setRoleCount] = useState({});
-  const { id, role, isHost } = useRecoilValue(playerState);
+  const { id, role } = useRecoilValue(playerState);
+  const [isHost, setIsHost] = useState(false);
   const { roomId } = useParams();
   const navigate = useNavigate();
 
@@ -21,9 +22,11 @@ export default function Standby() {
     socket.on("leave-room-player-redirect-room-list", () => navigate("/room/list"));
   }, []);
 
-  const handleRunButton = roomId => {
-    socketApi.handleRunButton(roomId);
-  };
+  useEffect(() => {
+    id === roomId ? setIsHost(true) : setIsHost(false);
+  }, [id]);
+
+  const handleRunButton = roomId => socketApi.handleRunButton(roomId);
 
   const handleExitButton = (roomId, role, id, isHost) => {
     socketApi.leaveRoom(roomId, role, id, isHost);
