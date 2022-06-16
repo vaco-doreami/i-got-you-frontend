@@ -5,7 +5,6 @@ export const playerState = atom({
   default: {
     id: "",
     role: "police",
-    isHost: false,
     nickname: "",
     characterType: "police1",
   },

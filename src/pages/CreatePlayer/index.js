@@ -47,14 +47,12 @@ export default function CreatePlayer() {
   const createRoom = () => {
     socketApi.assignRoomCreatorAsHost({
       ...player,
-      isHost: true,
     });
 
     socket.on(SEND_SOCKET_ID, socketId => {
       setPlayer({
         ...player,
         id: socketId,
-        isHost: true,
       });
     });
 
