@@ -3,6 +3,8 @@ import { background, obstacle } from "../../constants/assets";
 import { config } from "../config";
 import { socket, socketApi } from "../../utils/socket";
 
+import { SEND_COLLIDED_PLAYER, SEND_MOVE_PLAYER, SEND_STOP_PLAYER } from "../../constants/phaser";
+
 export default class MainScene extends Scene {
   constructor() {
     super({ key: "MainScene" });
@@ -10,11 +12,11 @@ export default class MainScene extends Scene {
     this.id = null;
     this.role = null;
     this.roomId = null;
+    this.isStart = false;
     this.playerList = [];
     this.playerSprites = {};
     this.nicknameSprites = {};
     this.currentDirection = "stop";
-    this.isStart = false;
   }
 
   initialize(id, role, roomId, playerList) {
@@ -49,7 +51,7 @@ export default class MainScene extends Scene {
   }
 
   create() {
-    socket.on("send-move-player", player => {
+    socket.on(SEND_MOVE_PLAYER, player => {
       if (player.id !== this.id) {
         const { id, currentDirection, coordinateX, coordinateY } = player;
 
@@ -62,7 +64,7 @@ export default class MainScene extends Scene {
       }
     });
 
-    socket.on("send-stop-player", player => {
+    socket.on(SEND_STOP_PLAYER, player => {
       if (player.id !== this.id) {
         const { id, currentDirection, coordinateX, coordinateY } = player;
 
@@ -75,7 +77,7 @@ export default class MainScene extends Scene {
       }
     });
 
-    socket.on("send-collided-player", playerId => {
+    socket.on(SEND_COLLIDED_PLAYER, playerId => {
       this.playerSprites[playerId].alpha === 1 ? (this.playerSprites[playerId].alpha = 0.5) : (this.playerSprites[playerId].alpha = 1);
     });
 
@@ -109,8 +111,8 @@ export default class MainScene extends Scene {
   }
 
   createBackground() {
-    const background = this.add.image(960, 540, "background");
-    background.depth = -1;
+    this.background = this.add.image(960, 540, "background");
+    this.background.depth = -1;
   }
 
   createCars() {

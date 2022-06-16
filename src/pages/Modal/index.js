@@ -10,7 +10,7 @@ export default function Modal(props) {
     <div>
       <ModalBackground>
         {props.type === "preload" && <CountDown />}
-        {props.type === "showResult" && <GameResult />}
+        {props.type === "result" && <GameResult />}
       </ModalBackground>
     </div>,
     document.getElementById("portal")

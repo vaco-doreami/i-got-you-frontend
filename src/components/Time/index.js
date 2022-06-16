@@ -1,37 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { timeState } from "../../states/modal";
-import { winnerState } from "../../states/player";
+import { timeState, winnerState } from "../../states/modal";
+import { useInterval } from "../../utils/hooks/useInterval";
 import styled from "styled-components";
 
 export default function Time() {
-  const gameRunningTime = 180;
-
   const setIsShowingTime = useSetRecoilState(timeState);
   const setIsResultModalOpen = useSetRecoilState(winnerState);
-  const [remainingTime, setRemainingTime] = useState(gameRunningTime);
 
-  let second = remainingTime;
+  let [remainingTime, setRemainingTime] = useState(180);
 
-  const startGame = second => {
-    const countDown = setInterval(() => {
-      second -= 1;
+  useInterval(() => {
+    if (remainingTime === 1) {
+      setIsResultModalOpen("robber");
+      setIsShowingTime(false);
+    }
 
-      if (second === 0) {
-        setIsShowingTime(false);
-        setIsResultModalOpen("robber");
-        clearInterval(countDown);
-      }
-
-      setRemainingTime(second);
-    }, 1000);
-
-    return () => clearInterval(countDown);
-  };
-
-  useEffect(() => {
-    startGame(second);
-  }, []);
+    setRemainingTime(remainingTime - 1);
+  }, 1000);
 
   return (
     <TimeTicker>

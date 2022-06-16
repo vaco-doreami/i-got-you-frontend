@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import GlobalStyles from "./GlobalStyles";
 import { Reset } from "styled-reset";
 import Main from "../../pages/Main";
@@ -19,7 +19,7 @@ function App() {
           <Route path="/room/list" element={<RoomList />} />
           <Route path="/room/:roomId" element={<Standby />} />
           <Route path="/game/:roomId" element={<Game />} />
-          <Route path="*" element={<Main />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
     </>
