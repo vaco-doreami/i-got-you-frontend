@@ -58,7 +58,7 @@ export default function Game() {
     socket.on(SEND_ARRESTED_PLAYER, (robberId, robberCount) => {
       setRoleCounts({ robberCount });
 
-      GameScene.makeRobberInvisible(robberId);
+      GameScene.makeRobberInvisible(robberId, 5);
     });
 
     socket.on(SEND_LEFT_PLAYER, (room, playerId) => {

@@ -30,9 +30,21 @@ export default class MainScene extends Scene {
     this.isStart = isStart;
   }
 
-  makeRobberInvisible(playerId) {
-    this.playerSprites[playerId].setVisible(false);
-    this.nicknameSprites[playerId].setVisible(false);
+  makeRobberInvisible(playerId, time) {
+    const timer = setInterval(() => {
+      time -= 1;
+
+      this.playerSprites[playerId].alpha === 1 ? (this.playerSprites[playerId].alpha = 0.2) : (this.playerSprites[playerId].alpha = 1);
+
+      if (time === 0) {
+        this.playerSprites[playerId].setVisible(false);
+        this.nicknameSprites[playerId].setVisible(false);
+
+        if (this.id === playerId) this.cameras.main.startFollow(this.playerSprites[playerId], false, 0.09, 0.09).setZoom(1);
+
+        clearInterval(timer);
+      }
+    }, 600);
   }
 
   playerLeaveGame(playerId) {
@@ -277,9 +289,6 @@ export default class MainScene extends Scene {
 
   arrest() {
     socketApi.arrestRobber(this.roomId, this.id);
-
-    this.cameras.main.startFollow(this.playerSprites[this.id], false, 0.09, 0.09);
-    this.cameras.main.setZoom(1);
   }
 
   contactPolice(player, otherPlayer) {
