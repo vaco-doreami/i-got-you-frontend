@@ -1,6 +1,25 @@
 import io from "socket.io-client";
-import { ASSIGN_ROOM_CREATOR_AS_HOST, ENTER_GAME, ENTER_ROOM_LIST, JOIN_ROOM, LEAVE_ROOM, LEAVE_GAME, HANDLE_RUN_BUTTON, STANDBY } from "../constants/socket";
-import { ARREST_ROBBER, POLICE_OPACITY_CHANGED, FIND_CURRENT_JOINING_ROOM, OPEN_VIDEO, CLOSE_VIDEO, PLAYER_MOVE, PLAYER_STOP, RETURNING_SIGNAL_TO_CONNECT_WEBRTC, SENDING_SIGNAL_TO_CONNECT_WEBRTC } from "../constants/phaser";
+import {
+  STANDBY,
+  ENTER_GAME,
+  JOIN_ROOM,
+  LEAVE_ROOM,
+  LEAVE_GAME,
+  ENTER_ROOM_LIST,
+  HANDLE_RUN_BUTTON,
+  ASSIGN_ROOM_CREATOR_AS_HOST,
+} from "../constants/socket";
+import {
+  OPEN_VIDEO,
+  CLOSE_VIDEO,
+  PLAYER_MOVE,
+  PLAYER_STOP,
+  ARREST_ROBBER,
+  FIND_ENTERED_ROOM,
+  POLICE_OPACITY_CHANGED,
+  SENDING_SIGNAL_TO_CONNECT_WEBRTC,
+  RETURNING_SIGNAL_TO_CONNECT_WEBRTC,
+} from "../constants/phaser";
 
 export const socket = io.connect(process.env.REACT_APP_SERVER_URL);
 
@@ -41,8 +60,8 @@ export const socketApi = {
   leaveGame: (roomId, playerId, playerRole) => {
     socket.emit(LEAVE_GAME, { roomId, playerId, playerRole });
   },
-  findCurrentJoiningRoom: roomId => {
-    socket.emit(FIND_CURRENT_JOINING_ROOM, roomId);
+  findEnteredRoom: roomId => {
+    socket.emit(FIND_ENTERED_ROOM, roomId);
   },
   returningSignalToConnectWebRTC: payload => {
     const { signal, callerID } = payload;

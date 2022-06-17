@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
-import { characterImage as character } from "../../constants/assets";
+import { characterImage as character, characterSpriteSheet } from "../../constants/assets";
 import { SEND_SOCKET_ID } from "../../constants/phaser";
 import { socket, socketApi } from "../../utils/socket";
 import { playerState } from "../../states/player";
@@ -38,23 +38,25 @@ export default function CreatePlayer() {
   };
 
   useEffect(() => {
+    const characterType = characterImages[index].alias;
+    const characterPath = characterSpriteSheet[characterType];
+
     setPlayer({
       ...player,
-      characterType: characterImages[index].alias,
+      characterPath,
+      characterType,
     });
   }, [index, characterImages]);
 
   const createRoom = () => {
     socketApi.assignRoomCreatorAsHost({
       ...player,
-      isHost: true,
     });
 
     socket.on(SEND_SOCKET_ID, socketId => {
       setPlayer({
         ...player,
         id: socketId,
-        isHost: true,
       });
     });
 

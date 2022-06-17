@@ -7,9 +7,12 @@ import styled from "styled-components";
 
 export default function Standby() {
   const [roleCount, setRoleCount] = useState({});
-  const { id, role, isHost } = useRecoilValue(playerState);
+  const { id, role } = useRecoilValue(playerState);
+  const [isHost, setIsHost] = useState(false);
   const { roomId } = useParams();
   const navigate = useNavigate();
+
+  const { policeCount, robberCount } = roleCount;
 
   useEffect(() => {
     socketApi.standby(roomId);
@@ -21,9 +24,11 @@ export default function Standby() {
     socket.on("leave-room-player-redirect-room-list", () => navigate("/room/list"));
   }, []);
 
-  const handleRunButton = roomId => {
-    socketApi.handleRunButton(roomId);
-  };
+  useEffect(() => {
+    id === roomId ? setIsHost(true) : setIsHost(false);
+  }, [id]);
+
+  const handleRunButton = roomId => socketApi.handleRunButton(roomId);
 
   const handleExitButton = (roomId, role, id, isHost) => {
     socketApi.leaveRoom(roomId, role, id, isHost);
@@ -41,11 +46,11 @@ export default function Standby() {
         />
         <p className="description">Waiting for other players . . .</p>
         <div className="count-wrap">
-          <p>경찰 {roleCount.police}</p>
-          <p>도둑 {roleCount.robber}</p>
+          <p>경찰 {policeCount}</p>
+          <p>도둑 {robberCount}</p>
         </div>
         <div className="game-start-button-wrap">
-          {roleCount.police > 0 && roleCount.robber > 0 && isHost && (
+          {policeCount > 0 && robberCount > 0 && isHost && (
             <button
               type="button"
               onClick={() => {
