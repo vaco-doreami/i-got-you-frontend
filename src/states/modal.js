@@ -14,3 +14,8 @@ export const winnerState = atom({
   key: "winnerState",
   default: null,
 });
+
+export const roomTitleState = atom({
+  key: "roomTitleState",
+  default: false,
+});
