@@ -4,9 +4,10 @@ export const playerState = atom({
   key: "playerState",
   default: {
     id: "",
-    role: "police",
+    role: "",
     nickname: "",
-    characterType: "police1",
+    characterType: "",
+    characterPath: "",
   },
 });
 

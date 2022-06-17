@@ -18,6 +18,27 @@ export default function CreatePlayer() {
   const [isShowRoomTitle, setIsShowRoomTitle] = useRecoilState(roomTitleState);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const characterType = characterImages[index].alias;
+    const characterPath = characterSpriteSheet[characterType];
+
+    setPlayer({
+      ...player,
+      characterPath,
+      characterType,
+    });
+  }, [index, characterImages]);
+
+  useEffect(() => {
+    setPlayer({
+      id: "",
+      role: "police",
+      nickname: "",
+      characterType: "police1",
+      characterPath: characterSpriteSheet.police1,
+    });
+  }, []);
+
   const handleRoleChange = e => {
     const role = e.target.value;
 
@@ -40,17 +61,6 @@ export default function CreatePlayer() {
       nickname,
     });
   };
-
-  useEffect(() => {
-    const characterType = characterImages[index].alias;
-    const characterPath = characterSpriteSheet[characterType];
-
-    setPlayer({
-      ...player,
-      characterPath,
-      characterType,
-    });
-  }, [index, characterImages]);
 
   const createRoom = roomTitle => {
     socketApi.assignRoomCreatorAsHost(
