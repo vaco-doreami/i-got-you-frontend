@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { socket, socketApi } from "../../utils/socket";
 import { playerState } from "../../states/player";
+import { CHANGE_ALL_PLAYER_SCENE, LEAVE_ROOM_PLAYER_REDIRECT_ROOM_LIST, RECEIVE_PLAYER } from "../../constants/socket";
 import styled from "styled-components";
 
 export default function Standby() {
@@ -17,11 +18,11 @@ export default function Standby() {
   useEffect(() => {
     socketApi.standby(roomId);
 
-    socket.on("receive-player", roomRoleCount => setRoleCount(roomRoleCount));
+    socket.on(RECEIVE_PLAYER, roomRoleCount => setRoleCount(roomRoleCount));
 
-    socket.on("change-all-player-scene", () => navigate(`/game/${roomId}`));
+    socket.on(CHANGE_ALL_PLAYER_SCENE, () => navigate(`/game/${roomId}`));
 
-    socket.on("leave-room-player-redirect-room-list", () => navigate("/room/list"));
+    socket.on(LEAVE_ROOM_PLAYER_REDIRECT_ROOM_LIST, () => navigate("/room/list"));
   }, []);
 
   useEffect(() => {

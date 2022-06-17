@@ -19,7 +19,7 @@ export default function RoleCount() {
       setIsShowingTime(false);
       setIsResultModalOpen("police");
     }
-  }, [robberCount]);
+  }, [policeCount, robberCount]);
 
   return <RemainingRobber>남은 도둑 수 {robberCount}</RemainingRobber>;
 }
