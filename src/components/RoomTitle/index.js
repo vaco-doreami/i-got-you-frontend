@@ -10,6 +10,7 @@ export default function RoomTitle({ createRoom, setIsShowRoomTitle }) {
       <div>
         <input
           type="text"
+          maxLength="10"
           onChange={e => {
             setRoomTitle(e.target.value);
           }}

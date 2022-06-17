@@ -29,8 +29,7 @@ export default function RoomList() {
               ""
             ) : (
               <li key={roomId}>
-                <p className="roomTitle">{roomsMembers[roomId].roomTitle}</p>
-                <span
+                <p
                   onClick={() => {
                     if (player.role === "police") {
                       if (roomsMembers[roomId].policeId.length === 2) {
@@ -50,7 +49,9 @@ export default function RoomList() {
                       }
                     }
                   }}
-                >{`경찰 ${roomsMembers[roomId].policeId.length} / 도둑 ${roomsMembers[roomId].robberId.length}`}</span>
+                >
+                  {roomsMembers[roomId].roomTitle} [ {`경찰 ${roomsMembers[roomId].policeId.length} / 도둑 ${roomsMembers[roomId].robberId.length}`} ]
+                </p>
               </li>
             )
           )}
@@ -70,7 +71,7 @@ const RoomListWrap = styled.div`
     font-weight: bold;
   }
 
-  span {
+  p {
     display: inline-block;
     width: 100%;
     padding: 20px;
@@ -84,7 +85,7 @@ const RoomListWrap = styled.div`
     background: rgba(255, 255, 255, 0.7);
   }
 
-  span:hover {
+  p:hover {
     cursor: pointer;
     color: #fff;
     background: #1a73e8;
@@ -98,12 +99,5 @@ const RoomListWrap = styled.div`
     a {
       margin-bottom: 0;
     }
-  }
-
-  .roomTitle {
-    position: absolute;
-    font-weight: bold;
-    top: 21px;
-    left: 20px;
   }
 `;
