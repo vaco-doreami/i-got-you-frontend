@@ -99,9 +99,9 @@ export default class MainScene extends Scene {
     this.policeGroup = this.add.group();
     this.robberGroup = this.add.group();
 
-    this.createBackground();
-
     this.sound.play("bgm", { volume: 0.5, loop: true });
+
+    this.createBackground();
 
     this.createCars();
 

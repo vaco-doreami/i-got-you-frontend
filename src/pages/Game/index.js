@@ -68,13 +68,13 @@ export default function Game() {
     });
 
     return () => {
-      game.destroy(true, true);
-
       socket.off(SET_VIDEO);
       socket.off(SEND_STOP_PLAYER);
       socket.off(SEND_EXIT_PLAYER);
       socket.off(SEND_ARRESTED_PLAYER);
       socket.off(SEND_ROOM_PLAYERS_INFORMATION);
+
+      game.destroy(true, true);
     };
   }, []);
 
