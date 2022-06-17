@@ -22,7 +22,6 @@ export const characterSpriteSheet = {
 
 export const background = {
   game: "/images/background/game-background.png",
-  audio: "/audio/Title.mp3",
 };
 
 export const obstacle = {
