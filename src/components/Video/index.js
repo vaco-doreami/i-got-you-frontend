@@ -63,6 +63,9 @@ export default function Video() {
       socket.off("send-current-joining-room");
       socket.off("new-video-chat-participant");
       socket.off("receiving-returned-signal-to-connect-webRTC");
+
+      userVideo.current = null;
+      teamPlayerVideo.current = null;
     };
   }, []);
 

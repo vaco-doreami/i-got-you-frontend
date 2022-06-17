@@ -15,7 +15,7 @@ import { socket, socketApi } from "../../utils/socket";
 import { GameScene } from "../../phaser/config";
 import { config } from "../../phaser/config";
 
-import { SEND_ARRESTED_PLAYER, SEND_EXIT_PLAYER, SEND_ROOM_PLAYERS_INFORMATION, SET_VIDEO } from "../../constants/phaser";
+import { SEND_ARRESTED_PLAYER, SEND_EXIT_PLAYER, SEND_ROOM_PLAYERS_INFORMATION, SEND_STOP_PLAYER, SET_VIDEO } from "../../constants/phaser";
 
 export default function Game() {
   const isPreloadModalOpen = useRecoilValue(preloadState);
@@ -29,7 +29,7 @@ export default function Game() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    new Phaser.Game(config);
+    const game = new Phaser.Game(config);
 
     socketApi.enterGame(roomId);
 
@@ -39,10 +39,15 @@ export default function Game() {
       setIsShowVideo(openVideo);
     });
 
-    socket.on(SEND_ROOM_PLAYERS_INFORMATION, (playersInformation, roleCount) => {
+    socket.on(SEND_ROOM_PLAYERS_INFORMATION, playersInformation => {
       GameScene.initialize(player.id, player.role, roomId, playersInformation);
 
-      const { policeCount, robberCount } = roleCount;
+      let policeCount = 0;
+      let robberCount = 0;
+
+      playersInformation.forEach(playerInformation => {
+        playerInformation.role === "police" ? (policeCount += 1) : (robberCount += 1);
+      });
 
       setRoleCounts({ policeCount, robberCount });
     });
@@ -61,6 +66,16 @@ export default function Game() {
 
       setRoleCounts({ policeCount, robberCount });
     });
+
+    return () => {
+      game.destroy(true, true);
+
+      socket.off(SET_VIDEO);
+      socket.off(SEND_STOP_PLAYER);
+      socket.off(SEND_EXIT_PLAYER);
+      socket.off(SEND_ARRESTED_PLAYER);
+      socket.off(SEND_ROOM_PLAYERS_INFORMATION);
+    };
   }, []);
 
   useEffect(() => {
@@ -72,9 +87,7 @@ export default function Game() {
   useEffect(() => {
     if (isResultModalOpen) {
       const moveToMainScreen = setTimeout(() => {
-        GameScene.sys.destroy(true);
         navigate("/");
-        window.location.reload();
       }, 5000);
 
       return () => clearTimeout(moveToMainScreen);
@@ -94,7 +107,7 @@ export default function Game() {
       {player.role === "police" && isShowVideo && <Video />}
       {isPreloadModalOpen && <Modal type="preload" />}
       {isShowRemainingTime && (
-        <div>
+        <div id="phaser-game">
           <Time />
           <RobberCount />
         </div>
