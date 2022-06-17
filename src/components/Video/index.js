@@ -2,6 +2,7 @@ import Peer from "simple-peer";
 import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { socket, socketApi } from "../../utils/socket";
+import { NEW_VIDEO_CHAT_PARTICIPANT, RECEIVING_RETURNED_SIGNAL_TO_CONNECT_WEBRTC, SEND_ENTERED_ROOM } from "../../constants/socket";
 import styled from "styled-components";
 
 export default function Video() {
@@ -15,9 +16,9 @@ export default function Video() {
       if (userVideo.current) {
         userVideo.current.srcObject = stream;
 
-        socketApi.findCurrentJoiningRoom(roomId);
+        socketApi.findEnteredRoom(roomId);
 
-        socket.on("send-current-joining-room", payload => {
+        socket.on(SEND_ENTERED_ROOM, payload => {
           if (socket.id === payload.policeId[0]) {
             const peer = new Peer({
               initiator: true,
@@ -29,7 +30,7 @@ export default function Video() {
               socketApi.sendingSignalToConnectWebRTC({ userToSignal: payload.policeId[1], callerID: socket.id, signal });
             });
 
-            socket.on("receiving-returned-signal-to-connect-webRTC", payload => {
+            socket.on(RECEIVING_RETURNED_SIGNAL_TO_CONNECT_WEBRTC, payload => {
               peer.signal(payload.signal);
             });
 
@@ -39,7 +40,7 @@ export default function Video() {
           }
         });
 
-        socket.on("new-video-chat-participant", payload => {
+        socket.on(NEW_VIDEO_CHAT_PARTICIPANT, payload => {
           const peer = new Peer({
             initiator: false,
             trickle: false,
@@ -60,9 +61,12 @@ export default function Video() {
     });
 
     return () => {
-      socket.off("send-current-joining-room");
-      socket.off("new-video-chat-participant");
-      socket.off("receiving-returned-signal-to-connect-webRTC");
+      socket.off(SEND_ENTERED_ROOM);
+      socket.off(NEW_VIDEO_CHAT_PARTICIPANT);
+      socket.off(RECEIVING_RETURNED_SIGNAL_TO_CONNECT_WEBRTC);
+
+      userVideo.current = null;
+      teamPlayerVideo.current = null;
     };
   }, []);
 

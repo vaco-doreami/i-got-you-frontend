@@ -4,13 +4,15 @@ import styled from "styled-components";
 
 import CountDown from "../../components/CountDown";
 import GameResult from "../../components/GameResult";
+import RoomTitle from "../../components/RoomTitle";
 
-export default function Modal(props) {
+export default function Modal({ type, createRoom, setIsShowRoomTitle }) {
   return ReactDOM.createPortal(
     <div>
       <ModalBackground>
-        {props.type === "preload" && <CountDown />}
-        {props.type === "result" && <GameResult />}
+        {type === "preload" && <CountDown />}
+        {type === "result" && <GameResult />}
+        {type === "roomTitle" && <RoomTitle createRoom={createRoom} setIsShowRoomTitle={setIsShowRoomTitle} />}
       </ModalBackground>
     </div>,
     document.getElementById("portal")

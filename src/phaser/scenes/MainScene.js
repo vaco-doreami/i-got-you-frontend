@@ -55,6 +55,8 @@ export default class MainScene extends Scene {
   preload() {
     this.load.image("background", background.game);
 
+    this.load.audio("bgm", background.audio);
+
     for (const carName in obstacle) {
       this.load.image(carName, obstacle[carName]);
     }
@@ -96,6 +98,8 @@ export default class MainScene extends Scene {
     this.carGroup = this.add.group();
     this.policeGroup = this.add.group();
     this.robberGroup = this.add.group();
+
+    this.sound.play("bgm", { volume: 0.5, loop: true });
 
     this.createBackground();
 
@@ -161,7 +165,11 @@ export default class MainScene extends Scene {
     this.playerSprites[key] = this.physics.add.sprite(coordinateX, coordinateY, key).setScale(2, 2).refreshBody();
 
     const color = this.role === role ? "blue" : "red";
-    this.nicknameSprites[key] = this.add.text(this.playerSprites[key].x, this.playerSprites[key].y - 10, nickname, { fontSize: "16px", color: color, align: "center" });
+    this.nicknameSprites[key] = this.add.text(this.playerSprites[key].x, this.playerSprites[key].y - 10, nickname, {
+      fontSize: "16px",
+      color: color,
+      align: "center",
+    });
 
     this.playerSprites[key].setBounce(0.2);
     this.playerSprites[key].setCollideWorldBounds(true);
