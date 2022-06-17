@@ -61,12 +61,12 @@ export default function Video() {
     });
 
     return () => {
+      userVideo.current = null;
+      teamPlayerVideo.current = null;
+
       socket.off(SEND_ENTERED_ROOM);
       socket.off(NEW_VIDEO_CHAT_PARTICIPANT);
       socket.off(RECEIVING_RETURNED_SIGNAL_TO_CONNECT_WEBRTC);
-
-      userVideo.current = null;
-      teamPlayerVideo.current = null;
     };
   }, []);
 

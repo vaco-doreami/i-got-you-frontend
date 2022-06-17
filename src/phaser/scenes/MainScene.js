@@ -226,27 +226,36 @@ export default class MainScene extends Scene {
   }
 
   managePlayerMovement(key) {
+    let speed;
+
     if (this.isStart) {
       if (this.cursors.left.isDown && this.playerSprites[key].alpha === 1) {
-        this.playerSprites[key].setVelocityX(-160);
-        this.playerSprites[key].setVelocityY(0);
-        this.playerSprites[key].anims.play(key + "left", true);
+        this.role === "police" ? (speed = -180) : (speed = -160);
 
+        this.playerSprites[key].setVelocityX(speed);
+        this.playerSprites[key].setVelocityY(0);
         this.currentDirection = "left";
+        this.playerSprites[key].anims.play(key + "left", true);
       } else if (this.cursors.right.isDown && this.playerSprites[key].alpha === 1) {
-        this.playerSprites[key].setVelocityX(160);
+        this.role === "police" ? (speed = 180) : (speed = 160);
+
+        this.playerSprites[key].setVelocityX(speed);
         this.playerSprites[key].setVelocityY(0);
         this.playerSprites[key].anims.play(key + "right", true);
 
         this.currentDirection = "right";
       } else if (this.cursors.up.isDown && this.playerSprites[key].alpha === 1) {
-        this.playerSprites[key].setVelocityY(-160);
+        this.role === "police" ? (speed = -180) : (speed = -160);
+
+        this.playerSprites[key].setVelocityY(speed);
         this.playerSprites[key].setVelocityX(0);
         this.playerSprites[key].anims.play(key + "up", true);
 
         this.currentDirection = "up";
       } else if (this.cursors.down.isDown && this.playerSprites[key].alpha === 1) {
-        this.playerSprites[key].setVelocityY(160);
+        this.role === "police" ? (speed = 180) : (speed = 160);
+
+        this.playerSprites[key].setVelocityY(speed);
         this.playerSprites[key].setVelocityX(0);
         this.playerSprites[key].anims.play(key + "down", true);
 
