@@ -55,8 +55,6 @@ export default class MainScene extends Scene {
   preload() {
     this.load.image("background", background.game);
 
-    this.load.audio("bgm", background.audio);
-
     for (const carName in obstacle) {
       this.load.image(carName, obstacle[carName]);
     }
@@ -98,8 +96,6 @@ export default class MainScene extends Scene {
     this.carGroup = this.add.group();
     this.policeGroup = this.add.group();
     this.robberGroup = this.add.group();
-
-    this.sound.play("bgm", { volume: 0.5, loop: true });
 
     this.createBackground();
 
