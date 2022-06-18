@@ -128,10 +128,10 @@ export default class MainScene extends Scene {
   }
 
   createCars() {
-    this.redcar = this.physics.add.sprite(0, 700, "redcar").setScale(0.5, 0.5).setVelocityX(400);
+    this.redcar = this.physics.add.sprite(0, 700, "redcar").setScale(0.5, 0.5).setVelocityX(400).setFlipX(true);
     this.bluecar = this.physics.add.sprite(0, 750, "bluecar").setScale(0.5, 0.5).setVelocityX(600);
     this.greencar = this.physics.add.sprite(0, 750, "greencar").setScale(0.5, 0.5).setVelocityX(300);
-    this.yellowcar = this.physics.add.sprite(0, 810, "yellowcar").setScale(0.5, 0.5).setVelocityX(800);
+    this.yellowcar = this.physics.add.sprite(0, 810, "yellowcar").setScale(0.5, 0.5).setVelocityX(800).setFlipX(true);
 
     this.carGroup.add(this.redcar);
     this.carGroup.add(this.bluecar);
