@@ -111,7 +111,6 @@ export default class MainScene extends Scene {
 
     if (this.role === "police") {
       this.physics.add.overlap(this.playerSprites[this.id], this.carGroup, this.collideCar, null, this);
-      this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.contactPolice, null, this);
     } else {
       this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.arrest, null, this);
     }
@@ -219,6 +218,8 @@ export default class MainScene extends Scene {
     this.moveCar(this.yellowcar);
 
     this.managePlayerMovement(this.id);
+
+    this.contactPolice(this.policeGroup.children.entries[0], this.policeGroup.children.entries[1]);
   }
 
   managePlayerMovement(key) {
