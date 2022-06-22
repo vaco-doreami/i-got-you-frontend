@@ -11,7 +11,6 @@ export const FIND_ENTERED_ROOM = "find-entered-room";
 export const RETURNING_SIGNAL_TO_CONNECT_WEBRTC = "returning-signal-to-connect-webRTC";
 export const SENDING_SIGNAL_TO_CONNECT_WEBRTC = "sending-signal-to-connect-webRTC";
 export const SET_VIDEO = "set-video";
-export const UNSET_VIDEO = "unset-video";
 export const OPEN_VIDEO = "open-video";
 export const CLOSE_VIDEO = "close-video";
 

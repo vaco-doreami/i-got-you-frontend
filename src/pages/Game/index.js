@@ -15,7 +15,7 @@ import { socket, socketApi } from "../../utils/socket";
 import { GameScene } from "../../phaser/config";
 import { config } from "../../phaser/config";
 
-import { SEND_ARRESTED_PLAYER, SEND_EXIT_PLAYER, SEND_ROOM_PLAYERS_INFORMATION, SEND_STOP_PLAYER, SET_VIDEO, UNSET_VIDEO } from "../../constants/phaser";
+import { SEND_ARRESTED_PLAYER, SEND_EXIT_PLAYER, SEND_ROOM_PLAYERS_INFORMATION, SEND_STOP_PLAYER, SET_VIDEO } from "../../constants/phaser";
 
 export default function Game() {
   const isPreloadModalOpen = useRecoilValue(preloadState);
@@ -63,6 +63,10 @@ export default function Game() {
       setRoleCounts({ policeCount, robberCount });
     });
 
+    socket.on(SET_VIDEO, openVideo => {
+      setIsShowVideo(openVideo);
+    });
+
     return () => {
       socket.off(SET_VIDEO);
       socket.off(SEND_STOP_PLAYER);
@@ -73,16 +77,6 @@ export default function Game() {
       game.destroy(true, true);
     };
   }, []);
-
-  useEffect(() => {
-    socket.once(SET_VIDEO, openVideo => {
-      !isShowVideo && setIsShowVideo(openVideo);
-    });
-
-    socket.once(UNSET_VIDEO, openVideo => {
-      isShowVideo && setIsShowVideo(openVideo);
-    });
-  }, [isShowVideo]);
 
   useEffect(() => {
     if (!isPreloadModalOpen) {
