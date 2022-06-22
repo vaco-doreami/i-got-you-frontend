@@ -120,6 +120,8 @@ export default class MainScene extends Scene {
     this.cameras.main.startFollow(this.playerSprites[this.id], true, 0.09, 0.09);
 
     this.cameras.main.setZoom(2.5);
+
+    this.contactPolice();
   }
 
   createBackground() {
@@ -153,7 +155,10 @@ export default class MainScene extends Scene {
     this.playerList.forEach(player => {
       const { id, characterPath } = player;
 
-      this.load.spritesheet(id, characterPath, { frameWidth: 32, frameheight: 50 });
+      this.load.spritesheet(id, characterPath, {
+        frameWidth: 32,
+        frameheight: 50,
+      });
     });
   }
 
@@ -163,8 +168,8 @@ export default class MainScene extends Scene {
     const color = this.role === role ? "blue" : "red";
     this.nicknameSprites[key] = this.add.text(this.playerSprites[key].x, this.playerSprites[key].y - 10, nickname, {
       fontSize: "16px",
-      color: color,
       align: "center",
+      color,
     });
 
     this.playerSprites[key].setBounce(0.2);
@@ -207,7 +212,7 @@ export default class MainScene extends Scene {
 
     this.anims.create({
       key: key + "stop",
-      frames: [{ key: key, frame: 0 }],
+      frames: [{ key, frame: 0 }],
       frameRate: 20,
     });
   }
@@ -325,5 +330,5 @@ export default class MainScene extends Scene {
         this.waiting = true;
       }, wait);
     }
-  };
+  }
 }
