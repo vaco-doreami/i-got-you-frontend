@@ -12,6 +12,7 @@ export default class MainScene extends Scene {
     this.id = null;
     this.role = null;
     this.roomId = null;
+    this.waiting = true;
     this.isStart = false;
     this.playerList = [];
     this.playerSprites = {};
@@ -111,7 +112,6 @@ export default class MainScene extends Scene {
 
     if (this.role === "police") {
       this.physics.add.overlap(this.playerSprites[this.id], this.carGroup, this.collideCar, null, this);
-      this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.contactPolice, null, this);
     } else {
       this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.arrest, null, this);
     }
@@ -219,6 +219,8 @@ export default class MainScene extends Scene {
     this.moveCar(this.yellowcar);
 
     this.managePlayerMovement(this.id);
+
+    this.throttle(this.contactPolice, 1000, this.policeGroup.children.entries[0], this.policeGroup.children.entries[1], this.roomId);
   }
 
   managePlayerMovement(key) {
@@ -304,12 +306,24 @@ export default class MainScene extends Scene {
     socketApi.arrestRobber(this.roomId, this.id);
   }
 
-  contactPolice(player, otherPlayer) {
+  contactPolice(player, otherPlayer, roomId) {
     const distance_x = player.x - otherPlayer.x;
     const distance_y = player.y - otherPlayer.y;
 
     const distance = Math.sqrt(Math.abs(distance_x * distance_x) + Math.abs(distance_y * distance_y));
 
-    distance > 62 ? socketApi.closeVideo(this.roomId) : socketApi.openVideo(this.roomId);
+    distance > 62 ? socketApi.closeVideo(roomId) : socketApi.openVideo(roomId);
   }
+
+  throttle(callback, wait, player, otherPlayer, roomId) {
+    if (this.waiting) {
+      callback(player, otherPlayer, roomId);
+
+      this.waiting = false;
+
+      setTimeout(() => {
+        this.waiting = true;
+      }, wait);
+    }
+  };
 }
