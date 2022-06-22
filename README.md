@@ -16,7 +16,7 @@
 
 <center>직접 그려본 맵 디자인</center>
 
-![](2022-06-17-22-16-26.png)
+![](/README.assets/2022-06-17-22-16-26.png)
 
 </details>
 
@@ -26,7 +26,7 @@
 
 <center>초기 피그마</center>
 
-![](2022-06-17-22-11-49.png)
+![](/README.assets/2022-06-17-22-11-49.png)
 
 </details>
 
@@ -34,7 +34,7 @@
 <summary>최종 아이디어</summary>
 '메타버스' 컨셉은 유지하되 '정치'라는 키워드 대신 여러 유저와 함께 플레이할 수 있는 '경찰과 도둑' 게임을 만드는 것이 어떻겠냐는 이야기가 나왔습니다. 원래 계획에서는 내 캐릭터가 단상에 올라가면 카메라가 켜지게끔 구상했었는데, 바꾼 계획에서는 두 캐릭터가 만나면 카메라가 켜져서 작전회의를 할 수 있게끔 바꿨습니다.
 
-![](2022-06-17-22-09-12.png)
+![](/README.assets/2022-06-17-22-09-12.png)
 
 </details>
 <br />
@@ -59,6 +59,32 @@
 
 <br />
 
+# 🎬 **Getting Started**
+### **Client**
+```
+git clone https://github.com/vaco-doreami/i-got-you-frontend.git
+npm install
+npm start
+```
+`env`파일을 `root`경로에 만들고 아래 내용을 추가해 주세요
+```
+REACT_APP_SERVER_URL=localhost:8000
+```
+
+### **Server**
+```
+git clone https://github.com/vaco-doreami/i-got-you-backend.git
+npm install
+npm start
+```
+`env`파일을 `root`경로에 만들고 아래 내용을 추가해 주세요
+```
+PORT=8000
+```
+
+
+<br />
+
 # 🌄 **Features**
 
 |                                                                                             |                                                                                                                   |
@@ -76,11 +102,11 @@
 
 ### 프로젝트 기획 및 필요한 assets 확보
 
-![](2022-06-17-22-54-42.png)
+![](/README.assets/2022-06-17-22-54-42.png)
 
 <center>Photoshop을 활용하여 직접 캐릭터(경찰) 색칠, 크기 조정</center>
 
-![](2022-06-17-23-03-33.png)
+![](/README.assets/2022-06-17-23-03-33.png)
 
 <center>맵 확보</center>
 
@@ -97,11 +123,12 @@
 - 자동차 충돌
 - 동시 여러 게임 진행
 
-## **3. 배포 및 리팩토링 [2022.06.15 ~ 2022.06.17]**
+## **3. 배포 및 리팩토링 [2022.06.15 ~ 2022.06.24]**
 
 - assets 크기 조정
 - bgm 용량 정리
 - netlify, aws 배포
+- webRTC throttle을 사용하여 반복요청 제어
 
 </br>
 
