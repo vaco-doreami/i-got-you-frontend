@@ -8,15 +8,17 @@ export default function CountDown() {
   const setIsModalOpen = useSetRecoilState(preloadState);
   const setIsTimeShowing = useSetRecoilState(timeState);
 
-  let [countdown, setCountdown] = useState(3);
+  const [countdown, setCountdown] = useState(3);
+
+  let second = countdown;
 
   useInterval(() => {
-    if (countdown === 1) {
+    if (second === 1) {
       setIsModalOpen(false);
       setIsTimeShowing(true);
     }
 
-    setCountdown(countdown => countdown - 1);
+    setCountdown(second => second - 1);
   }, 1000);
 
   return <Time>{countdown}</Time>;

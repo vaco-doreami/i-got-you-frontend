@@ -13,7 +13,7 @@ export const useInterval = (countDown, interval) => {
     }
 
     if (interval !== null) {
-      let timer = setInterval(callback, interval);
+      const timer = setInterval(callback, interval);
 
       return () => clearInterval(timer);
     }

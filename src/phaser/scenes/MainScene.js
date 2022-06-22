@@ -113,15 +113,13 @@ export default class MainScene extends Scene {
     if (this.role === "police") {
       this.physics.add.overlap(this.playerSprites[this.id], this.carGroup, this.collideCar, null, this);
     } else {
-      this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.arrest, null, this);
+      this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.arrestRobber, null, this);
     }
 
     this.cameras.main.setBounds(0, 0, 1920, 1080);
     this.cameras.main.startFollow(this.playerSprites[this.id], true, 0.09, 0.09);
 
     this.cameras.main.setZoom(2.5);
-
-    this.contactPolice();
   }
 
   createBackground() {
@@ -212,7 +210,7 @@ export default class MainScene extends Scene {
 
     this.anims.create({
       key: key + "stop",
-      frames: [{ key, frame: 0 }],
+      frames: [{ key: key, frame: 0 }],
       frameRate: 20,
     });
   }
@@ -307,7 +305,7 @@ export default class MainScene extends Scene {
     }
   }
 
-  arrest() {
+  arrestRobber() {
     socketApi.arrestRobber(this.roomId, this.id);
   }
 
@@ -322,12 +320,14 @@ export default class MainScene extends Scene {
 
   throttle(callback, wait, player, otherPlayer, roomId) {
     if (this.waiting) {
-      callback(player, otherPlayer, roomId);
+      otherPlayer && callback(player, otherPlayer, roomId);
 
       this.waiting = false;
 
-      setTimeout(() => {
+      const contactPoliceTimer = setTimeout(() => {
         this.waiting = true;
+
+        clearTimeout(contactPoliceTimer);
       }, wait);
     }
   }
