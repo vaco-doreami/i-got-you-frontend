@@ -113,7 +113,7 @@ export default class MainScene extends Scene {
     if (this.role === "police") {
       this.physics.add.overlap(this.playerSprites[this.id], this.carGroup, this.collideCar, null, this);
     } else {
-      this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.arrest, null, this);
+      this.physics.add.overlap(this.playerSprites[this.id], this.policeGroup, this.arrestRobber, null, this);
     }
 
     this.cameras.main.setBounds(0, 0, 1920, 1080);
@@ -153,7 +153,10 @@ export default class MainScene extends Scene {
     this.playerList.forEach(player => {
       const { id, characterPath } = player;
 
-      this.load.spritesheet(id, characterPath, { frameWidth: 32, frameheight: 50 });
+      this.load.spritesheet(id, characterPath, {
+        frameWidth: 32,
+        frameheight: 50,
+      });
     });
   }
 
@@ -163,8 +166,8 @@ export default class MainScene extends Scene {
     const color = this.role === role ? "blue" : "red";
     this.nicknameSprites[key] = this.add.text(this.playerSprites[key].x, this.playerSprites[key].y - 10, nickname, {
       fontSize: "16px",
-      color: color,
       align: "center",
+      color,
     });
 
     this.playerSprites[key].setBounce(0.2);
@@ -302,7 +305,7 @@ export default class MainScene extends Scene {
     }
   }
 
-  arrest() {
+  arrestRobber() {
     socketApi.arrestRobber(this.roomId, this.id);
   }
 
@@ -317,13 +320,15 @@ export default class MainScene extends Scene {
 
   throttle(callback, wait, player, otherPlayer, roomId) {
     if (this.waiting) {
-      callback(player, otherPlayer, roomId);
+      otherPlayer && callback(player, otherPlayer, roomId);
 
       this.waiting = false;
 
-      setTimeout(() => {
+      const contactPoliceTimer = setTimeout(() => {
         this.waiting = true;
+
+        clearTimeout(contactPoliceTimer);
       }, wait);
     }
-  };
+  }
 }

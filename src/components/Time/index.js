@@ -8,15 +8,17 @@ export default function Time() {
   const setIsShowingTime = useSetRecoilState(timeState);
   const setIsResultModalOpen = useSetRecoilState(winnerState);
 
-  let [remainingTime, setRemainingTime] = useState(180);
+  const [remainingTime, setRemainingTime] = useState(180);
+
+  let second = remainingTime;
 
   useInterval(() => {
-    if (remainingTime === 1) {
+    if (second === 1) {
       setIsResultModalOpen("robber");
       setIsShowingTime(false);
     }
 
-    setRemainingTime(remainingTime - 1);
+    setRemainingTime(second - 1);
   }, 1000);
 
   return (
