@@ -14,6 +14,7 @@ export default function RoomTitle({ createRoom, setIsShowRoomTitle }) {
           onChange={e => {
             setRoomTitle(e.target.value);
           }}
+          data-testid="roomtitle-input"
         />
       </div>
       <p className="btn-wrap">
