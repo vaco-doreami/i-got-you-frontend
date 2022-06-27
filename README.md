@@ -7,12 +7,11 @@
 # 💭 **Motivation**
 
 ![](/README.assets/main_screen.png)
-
 어렸을 때 누구나 한 번쯤은 친구들과 추억의 "경찰과 도둑 게임" 해보지 않으셨나요?
 
 저희는 세대를 불문하지 않는 추억의 경찰과 도둑 게임을 온라인에서도 플레이시켜보고 싶었습니다.
 
-실시간으로 플레이하면서 내 팀 플레이어의 얼굴을 보며 소통까지 할 수 있는 "메타버스" 개념을 담은 게임을 만든다면 꽤 재밌게 만들 수 있겠다는 생각에서 착안하였습니다.
+실시간으로 플레이하면서 내 팀 플레이어의 얼굴을 보며 소통까지 할 수 있는 메타버스 개념을 담은 게임을 만든다면 꽤 재밌게 만들 수 있겠다는 생각에서 착안하였습니다.
 
 <br />
 
@@ -48,7 +47,7 @@
 
 <summary>확정된 아이디어</summary>
 
-`메타버스` 컨셉은 유지하되 여러 유저와 함께 플레이할 수 있는 `경찰과 도둑` 게임을 만드는 것으로 주제를 바꿔보았습니다. 초안에서는 내 캐릭터가 단상에 올라가면 카메라가 켜지게끔 구상했었는데, 바꾼 계획에서는 두 캐릭터가 만나면 카메라가 켜져서 작전회의를 할 수 있게끔 바꿨습니다. 새로운 요소들을 게임에 각색하면 할수록 재밌어지는 우리의 게임을 상상할 수 있었습니다.
+`메타버스` 컨셉은 유지하되 여러 유저와 함께 플레이할 수 있는 `경찰과 도둑` 게임을 만드는 것으로 주제를 바꿔보았습니다. 초안에서는 내 캐릭터가 단상에 올라가면 카메라가 켜지게끔 구상했었는데, 최종적으로 바꾼 계획에서는 두 캐릭터가 만나면 카메라가 켜져서 작전회의를 할 수 있게끔 바꿨습니다. 새로운 요소들을 게임에 각색하면 할수록 재밌어지는 우리의 게임을 상상할 수 있었습니다.
 
 ![](/README.assets/third_draft.png)
 
@@ -81,12 +80,6 @@
 
 ### **Client**
 
-`env`파일을 `root`경로에 만들고 아래 내용을 추가해 주세요
-
-```
-REACT_APP_SERVER_URL=localhost:8000
-```
-
 ```
 git clone https://github.com/vaco-doreami/i-got-you-frontend.git
 npm install
@@ -94,12 +87,6 @@ npm start
 ```
 
 ### **Server**
-
-`env`파일을 `root`경로에 만들고 아래 내용을 추가해 주세요
-
-```
-PORT=8000
-```
 
 ```
 git clone https://github.com/vaco-doreami/i-got-you-backend.git
@@ -130,15 +117,14 @@ npm run dev
 
 ![](/README.assets/character_image.png)
 
+![](/README.assets/map.png)
+
 ![character](/README.assets/character_coloring.gif)
 
 <center>Photoshop을 활용하여 캐릭터(경찰) 디자인</center>
 
 <br />
 
-![](/README.assets/map.png)
-
-<center>맵 확보</center>
 <br />
 
 ## **2. 코드 작성 [2022.06.05 ~ 2022.06.14]**
