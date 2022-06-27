@@ -120,7 +120,7 @@ export default function CreatePlayer() {
           <h3 className="title">캐릭터 생성</h3>
           <div>
             <p>이름</p>
-            <input type="text" maxLength="5" onChange={handleNicknameChange} />
+            <input data-testid="nickname-input" type="text" maxLength="5" onChange={handleNicknameChange} />
           </div>
           <div>
             <p>역할</p>
