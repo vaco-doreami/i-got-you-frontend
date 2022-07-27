@@ -35,10 +35,6 @@ export default function Game() {
 
     socketApi.findEnteredRoom(roomId);
 
-    socket.on(SET_VIDEO, openVideo => {
-      setIsShowVideo(openVideo);
-    });
-
     socket.on(SEND_ROOM_PLAYERS_INFORMATION, playersInformation => {
       GameScene.initialize(player.id, player.role, roomId, playersInformation);
 
@@ -65,6 +61,10 @@ export default function Game() {
       const robberCount = room.robberId.length;
 
       setRoleCounts({ policeCount, robberCount });
+    });
+
+    socket.on(SET_VIDEO, openVideo => {
+      setIsShowVideo(openVideo);
     });
 
     return () => {
